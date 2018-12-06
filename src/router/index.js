@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/views/Login'
+// import Login from '@/views/Login'
+import Login from '../views/login/LoginCtn';
 import Main from '@/views/Main'
 import Meetting from '@/views/Meetting'
 import AddMeet from '@/views/AddMeet'

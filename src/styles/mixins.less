@@ -1,0 +1,73 @@
+//渐变
+.linear-gradient-fun(@attribute, @direction, @list){	
+	@{attribute}: -webkit-linear-gradient(@direction, @list); /* Safari 5.1 - 6.0 */
+    @{attribute}: -o-linear-gradient(@direction, @list); /* Opera 11.1 - 12.0 */
+    @{attribute}: -moz-linear-gradient(@direction, @list); /* Firefox 3.6 - 15 */
+    @{attribute}: linear-gradient(@direction, @list); /* 标准的语法（必须放在最后） */
+}
+.box-sizing-border-box{
+	 -moz-box-sizing: border-box;  
+     -webkit-box-sizing: border-box; 
+     -o-box-sizing: border-box; 
+     -ms-box-sizing: border-box; 
+     box-sizing: border-box; 
+}
+.ctn-style(@ctn-width, @ctn-height, @ctn-border-radius, @ctn-bg){
+	width: @ctn-width;
+	height: @ctn-height;
+	border-radius: @ctn-border-radius;
+	background-color:@ctn-bg;
+}
+.border(@border-width, @border-type, @border-color){
+	border:@arguments;
+}
+.title-style{
+	font-size: @large-title-font-size;
+	color:@title-text-color;
+}
+.orange-linear-gradient-text{
+	@list:@orange,@orange-red;
+	color: @orange;
+	.linear-gradient-fun(background-image, to top, @list);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+.linear-gradient-button(){
+	width: @back-to-index-btn-width;
+	height: @back-to-index-btn-height;
+	color: #fff;
+	border: none;
+	.linear-gradient-fun(background, to right, @greenList);
+}
+.border-button(){
+	width: @back-to-index-btn-width;
+	height: @back-to-index-btn-height;
+	color: @agree-green;
+	background-color: transparent;
+	border: 1px solid @agree-green;
+}
+.linear-line-button(){
+	width: @back-to-index-btn-width;
+	height: @back-to-index-btn-height;
+	color: @agree-green;
+	background: #fff;
+	border: 2px solid @agree-green;
+}
+.count-down-style{
+	font-size: @title-font-size;
+	padding: .472rem;
+	.orange-linear-gradient-text;
+}
+.font-tips(){
+	font-size:@text-font-size;
+	text-color: @pre-text-color;
+	text-align: left;
+}
+.rotate(@deg){
+	-moz-transform:rotate(@deg); 
+     -webkit-transform:rotate(@deg); 
+     -o-transform:rotate(@deg); 
+     -ms-transform:rotate(@deg); 
+     transform:rotate(@deg); 
+
+}
