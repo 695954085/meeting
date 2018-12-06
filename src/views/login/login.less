@@ -1,0 +1,391 @@
+@loginInfoCtnWidth: 28.92rem;
+@loginInfoCtnHeight: 60.62rem;
+@sign-out-bg: #626262;
+@sign-out-border-width: .35rem;
+
+[aspectratio] {
+  position: relative;
+}
+[aspectratio]::before {
+  content: "";
+  display: block;
+  width: 1px;
+  margin-left: -1px;
+  height: 0;
+}
+[aspectratio-content] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+[data-id="loginInfoCtn"] {
+  color: #bbbbbb;
+  &.loginSign {
+    color: #666;
+  }
+  >i {
+    margin-left: 14px;
+    font-size: 32px;
+    +span {
+      margin-left: 14px;
+      font-size: 18px;
+    }
+  }
+  ~span {
+    color: @agree-green;
+    cursor: pointer;
+  }
+  .icon-down {
+    font-size: 32px;
+    margin-left: 14px;
+  }
+  &.loginSign .icon-down {
+    font-size: 32px;
+  }
+}
+
+.main-ctn div.sign-out {
+  position: absolute;
+  color: #fff;
+  background: @sign-out-bg;
+  padding: 16px;
+  left: 32px;
+	z-index: 2;
+	font-size: 32px;
+  &:before {
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 0;
+		left: 50%;
+		transform: translateX(-50%);
+    top: -30px;
+    border: 16px solid transparent;
+    border-bottom-color: @sign-out-bg;
+  }
+  >i {
+    font-size: 32px;
+    margin-right: 16px;
+  }
+}
+
+.login-ctn {
+  width: 100vw;
+  height: 100vh;
+  padding: 0 32px;
+  @list: @main-ctn-bg-light,
+  @main-ctn-bg-darken;
+  .linear-gradient-fun(background, to bottom, @list);
+  .box-sizing-border-box;
+  &:before {
+    // background: url(../../assets/img/earth-bg.png) no-repeat bottom;
+    position: absolute;
+    content: "";
+    top: 0;
+    right: 0;
+    bottom: 75%;
+    left: 0;
+    background-size: cover;
+  }
+  &:after {
+    // background: url(../../assets/img/earth-bg.png) no-repeat center;
+    position: absolute;
+    content: "";
+    top: 75%;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-size: cover;
+  }
+
+  .login-info-ctn {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    z-index: 1;
+
+    .login-title-img {
+      aspect-ratio: '686:250';
+    }
+
+    .login-title-img {
+      .login-title-img_content {
+        margin-top: 145px;
+        width: 115px;
+        height: 105px;
+      }
+    }
+
+    .login-info-title {
+      aspect-ratio:'686:100';
+    }
+
+    .login-info-title {
+      font-size: 62px;
+      margin-bottom: 61px;
+      font-family: SourceHanSansCN-Normal;
+      font-weight: normal;
+      font-stretch: normal;
+      letter-spacing: 0px;
+      color: #666666;
+
+      > div {
+        padding-top: 42px;
+      }
+
+      + div {
+        aspect-ratio:'686:100';
+      }
+
+      + div + div {
+        aspect-ratio:'686:100';
+      }
+
+      + div {
+        margin-bottom: 36px;
+      }
+
+      + div > div,
+      + div + div > div {
+        width: 100%;
+        padding-left: 100px;
+        border-radius: 36px;
+        border: 2px solid @password-input-border-color;
+        border-radius: @btn-border-radius;
+        .box-sizing-border-box;
+        &:before {
+          position: absolute;
+          content: "\e791";
+          top: 0;
+          left: 0;
+          bottom: 0;
+          width: 100px;
+          color: #a6a6a6;
+          border-radius: @btn-border-radius 0 0 @btn-border-radius;
+          font-family: icon;
+          line-height: 100px;
+          font-size: 32px;
+          background-color: #fff;
+        }
+        >input {
+          width: 100%;
+          height: 100%;
+          top: 0;
+          bottom: 0;
+          padding: 0;
+          background-color: #fff;
+          font-size: @big-font-size;
+          background: #fff;
+          border: none;
+          border-radius: 0 @btn-border-radius @btn-border-radius 0;
+          outline: none;
+          +i {
+            position: absolute;
+            right: 32px;
+            font-size: 32px;
+            line-height: 100px;
+            color: #ccc;
+          }
+        }
+        >.tips {
+          position: absolute;
+          top: -37px;
+          left: 0;
+          width: 213px;
+          text-align: left;
+          color: #de5555;
+          font-size: @p-font-size;
+        }
+      }
+      +div+div+div {
+        width: 100%;
+        margin-top: 36px;
+        text-align: left;
+        color: #a6a6a6;
+        line-height: 39px;
+        font-size: 30px;
+        input[type="checkbox"] {
+          @input-size: 26px;
+          position: absolute;
+          width: @input-size;
+          height: @input-size;
+          opacity: 0;
+          z-index: 2;
+          +label {
+            position: relative;
+            left: 36px;
+            &:before {
+              position: absolute;
+              content: "";
+              width: @input-size;
+              height: @input-size;
+              left: -32px;
+              top: 8px;
+              border: 0.8px solid #ccc;
+              border-radius: 1.56px;
+            }
+          }
+          &:checked+label:before {
+            content: "\2713";
+            color: #fff;
+            text-align: center;
+            line-height: 1;
+            font-weight: bold;
+            border-color: @agree-green;
+            background: @agree-green;
+          }
+          +label+span {
+            float: right;
+          }
+        }
+      }
+    }
+
+    .login-button {
+        aspect-ratio:'686:100';
+    }
+
+    .login-button {
+      margin-top: 80px;
+    }
+
+    > div > div > button {
+      .linear-gradient-button();
+      width: 100%;
+      height: 100%;
+      font-size: 42px;
+    }
+  }
+
+  .face-swiping-assist {
+    aspect-ratio:'686:250';
+  }
+
+  .face-swiping-assist {
+    position: relative;
+    left: 0;
+    right: 0;
+    bottom: -160px;
+    width: 100%;
+    text-align: center;
+    color: @agree-green;
+    z-index: 2;    > div >i {
+      font-size: 93px;
+    }
+    > div >div {
+      margin-top: 22px;
+      font-weight: bold;
+      font-size: @p-font-size;
+    }
+  }
+
+  .login-fail-ctn {
+    aspect-ratio:'668:793';
+  }
+
+  .login-fail-ctn {
+    @height: 800px;
+    position: absolute;
+    top: 50%;
+    left: 41px;
+    right: 41px;
+    margin-top: -@height/2;
+    background: #fff;
+    border-radius: @btn-border-radius;
+    z-index: 1001;
+    > div .login-fail-ctt {
+      position: absolute;
+      left: 40px;
+      top: 24px;
+      right: 40px;
+      bottom: 0px;
+      .fail-title {
+        font-size: 48px;
+        font-weight: bold;
+        color: #444;
+        text-align: center;
+        >i {
+          font-weight: normal;
+          color: #ff8c77;
+          font-size: 72px;
+          margin-right: 49px;
+          vertical-align: sub;
+        }
+      }
+      .fail-detail-ctn {
+        margin-top: 62px;
+        font-size: 38px;
+        left: 28px;
+        right: 28px;
+        position: absolute;
+        font-weight: normal;
+        font-stretch: normal;
+        line-height: 58px;
+        letter-spacing: 0px;
+        color: #444444;
+      }
+    }
+    > div .fail-operations-ctn {
+      > div {
+        aspect-ratio:'588:100';
+      }
+
+      .reLogin-div {
+        bottom: 102px;
+      }
+
+      .quitLogin-div {
+        bottom: 62px;
+      }
+
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      .reLogin {
+        .linear-line-button();
+        width: 100%;
+        height: 100%;
+        color: #fff;
+        background: linear-gradient(to right,#6dedc2,#35b5c2);
+        background-blend-mode: normal,
+          normal;
+        border-radius: 18px;
+      }
+      .quitLogin {
+        width: 100%;
+        height: 100%;
+	      background-color: #ffffff;
+        border-style: solid;
+        border-width: 2px;
+        border-image-source: linear-gradient(0deg,
+          #35b5c2 100%);
+        border-image-slice: 1;
+        color: #35b5c2;
+      }
+    }
+  }
+
+  .face-swiping-ctn {
+    width: 100%;
+    padding-top: 223px;
+    text-align: center;
+    font-size: @bigger-number-font-size;
+    z-index: 1;
+
+    .face__info {
+      display: block;
+      margin-bottom: 61px;
+    }
+    #video {
+      aspect-ratio:'668:793';
+    }
+    #video {
+      width: 668px;
+    }
+  }
+}
