@@ -2,14 +2,17 @@
   <div class="login-ctn">
     <div class="login-info-ctn"
          v-if='loginMode === "key"'>
-      <div class="login-title-img" aspectratio>
+      <div class="login-title-img"
+           aspectratio>
         <div aspectratio-content>
-          <img src="../../assets/demo/1.jpg" alt="" class="login-title-img_content">
+          <img src="../../assets/demo/1.jpg"
+               alt=""
+               class="login-title-img_content">
         </div>
       </div>
       <div class="login-info-title"
            aspectratio>
-        <div aspectratio-content>智慧办公系统</div>
+        <div aspectratio-content>智慧办公管理系统</div>
       </div>
       <div aspectratio>
         <div aspectratio-content>
@@ -41,9 +44,10 @@
            aspectratio>
         <div aspectratio-content>
           <button id="loginBtn"
-                  @click="login()">登录/Login</button>
+                  @click="login">登录/Login</button>
         </div>
       </div>
+      <!--
       <div class="face-swiping-assist"
            aspectratio
            @click="loginMode = 'face'">
@@ -51,9 +55,9 @@
           <i class="icon icon-face"></i>
           <div class="ignore">刷脸登录</div>
         </div>
-      </div>
+      </div> -->
     </div>
-    <div class="face-swiping-ctn"
+    <!-- <div class="face-swiping-ctn"
          v-else-if='loginMode === "face"'
          ref="faceswipingctnRef">
       <span class="face__info"
@@ -71,7 +75,6 @@
             <i class="icon icon-fail"></i>登录失败</div>
           <div class="fail-detail-ctn">{{failMessage}}</div>
           <div class="fail-operations-ctn">
-            <!-- <button id="exitLogin">退出登录</button> -->
             <div class="reLogin-div"
                  aspectratio>
               <div aspectratio-content>
@@ -91,7 +94,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -108,6 +111,13 @@ export default {
     }
   },
   methods: {
+    login () {
+      //  路由跳转
+      this.$router.push(`/main`)
+    },
+    eyeOpen () {
+
+    }
   }
 }
 </script>

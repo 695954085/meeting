@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <x-header :left-options="{showBack: false}">首页</x-header>
-    <group-title>办公类</group-title>
+    <h3>办公类</h3>
     <grid :cols="3"
           :show-lr-borders="false">
       <grid-item v-for="(item,index) in  workData"
@@ -12,7 +12,7 @@
              :src="item.path">
       </grid-item>
     </grid>
-    <group-title>生活类</group-title>
+    <h3>生活类</h3>
     <grid :cols="3"
           :show-lr-borders="false">
       <grid-item v-for="(item,index) in  lifeData"
@@ -22,8 +22,9 @@
              :src="item.path">
       </grid-item>
     </grid>
-    <tabbar>
-      <tabbar-item show-dot>
+    <tabbar class="bottom-actionbar">
+      <tabbar-item show-dot
+                   selected>
         <img slot="icon"
              src="../assets/demo/icon_nav_button.png">
         <span slot="label">首页</span>
@@ -33,8 +34,7 @@
              src="../assets/demo/icon_nav_msg.png">
         <span slot="label">生活</span>
       </tabbar-item>
-      <tabbar-item selected
-                   link="/component/demo">
+      <tabbar-item>
         <img slot="icon"
              src="../assets/demo/icon_nav_article.png">
         <span slot="label">社区</span>
@@ -63,13 +63,13 @@ export default {
       workData: [
         { name: '会议管理',
           path: require('../assets/demo/icon_nav_button.png'),
-          link: '/meetting'},
+          link: '/meetting' },
         { name: '办公管理',
           path: require('../assets/demo/icon_nav_button.png'),
-          link: '/meetting'},
+          link: '/meetting' },
         { name: '报销管理',
           path: require('../assets/demo/icon_nav_button.png'),
-          link: '/meetting'}
+          link: '/meetting' }
       ],
       lifeData: [
         { name: '请假', path: require('../assets/demo/icon_nav_button.png') },
@@ -88,3 +88,8 @@ export default {
 
 }
 </script>
+<style lang="less" scoped>
+.bottom-actionbar {
+  position: fixed;
+}
+</style>

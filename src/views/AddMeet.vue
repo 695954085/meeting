@@ -4,38 +4,50 @@
     <group>
       <x-input title="会议主题"
                placeholder="请输入会议主题"></x-input>
-      <x-input title="会议室"
-               placeholder="请选择>"
-               @on-focus="handleSelectRoom"
-               v-model="roomValue"></x-input>
-      <x-input title="会议时间"
-               placeholder="请选择>"
-               @on-focus="handleSelectTime"
-               v-model="timeValue"></x-input>
-      <x-input title="参会人员"
-               placeholder="请选择>"
-               @on-focus="handleSelectPerson"
-               v-model="personValue"></x-input>
+      <cell @click.native="handleSelectRoom"
+            title="会议室"
+            align-items="flex-start"
+            :value="roomValue"
+            value-align="left"
+            is-link>
+      </cell>
+      <cell @click.native="handleSelectTime"
+            title="会议时间"
+            align-items="flex-start"
+            :value="timeValue"
+            value-align="left"
+            is-link>
+      </cell>
+      <cell @click.native="handleSelectPerson"
+            title="参会人员"
+            align-items="flex-start"
+            :value="personValue"
+            value-align="left"
+            is-link>
+      </cell>
     </group>
     <actionsheet v-model="show1"
                  :menus="menus1"
-                 @on-click-menu="handlePickRoom"
-                 @on-after-hide="log('after hide')"
-                 @on-after-show="log('after show')"></actionsheet>
+                 @on-click-menu="handlePickRoom"></actionsheet>
   </div>
 </template>
 <script>
-import { Actionsheet } from 'vux'
-
+import { Actionsheet, Cell } from 'vux'
+import { mapMutations, mapState } from 'vuex'
 export default {
   name: 'AddMeet',
   components: {
-    Actionsheet
+    Actionsheet, Cell
   },
   data () {
     return {
       show1: false,
-      menus1: ['会议室1', '会议室2', '会议室3']
+      menus1: ['会议室1', '会议室2', '会议室3'],
+      selectRoom: '请选择',
+      roomValue: '请选择',
+      timeValue: '请选择'
+      // personValue: '请选择'
+
     }
   },
   methods: {
@@ -50,6 +62,19 @@ export default {
     },
     handleSelectPerson () {
       this.$router.push(`/selectPerson`)
+    }
+  },
+  computed: {
+    ...mapState(['bookPersonList']),
+    personValue: function () {
+      let returnValue = '请选择'
+      if (this.bookPersonList.length !== 0) {
+        returnValue = ''
+        this.bookPersonList.forEach(element => {
+          returnValue += ' ' + element
+        })
+      }
+      return returnValue
     }
   }
 

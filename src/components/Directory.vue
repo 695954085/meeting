@@ -1,15 +1,18 @@
 <template>
   <div class="directory">
-    <group v-for="(person,index) in personData"
-           :key="index">
-      <checklist :title="person.letter"
-                 :options="person.personMumber"
-                 @on-change="change"></checklist>
+    <group v-for="(person,index) in dealData"
+           :key="index"
+           :title="person.letter|toUpperCase">
+      <checklist :check-disabled="false"
+                 :options="person.data"
+                 v-model="personList"></checklist>
     </group>
   </div>
 </template>
 <script>
 import { Cell, Checklist } from 'vux'
+import { mapState, mapMutations } from 'vuex'
+import Pingyin from '../utils/pingyin.js'
 export default {
   name: 'Directory',
   components: {
@@ -19,14 +22,51 @@ export default {
   props: ['personData'],
   data () {
     return {
-      objectList: [{ key: '1', value: '001 value' }, { key: '2', value: '002 value' }, { key: '3', value: '003 value' }]
+    }
+  },
+  filters: {
+    toUpperCase: function (value) {
+      return value.toUpperCase()
     }
   },
   methods: {
+    ...mapMutations(['setbookPersonList']),
     change (val, label) {
-      alert('change')
+      console.log('haha')
+      // if (val.length !== 0) {
+      //   console.log(this.personList)
+      //   this.setbookPersonList(this.personList)
+      // }
+    }
+  },
+  computed: {
+    ...mapState(['bookPersonList']),
+    dealData: function () {
+      let data = Pingyin.pySegSort(this.personData)
+      return data
+    },
+    personList: {
+      get () {
+        return this.bookPersonList
+      },
+      set (val) {
+        this.$store.commit('setbookPersonList', val)
+      }
     }
   }
 
 }
 </script>
+<style lang="less">
+.directory {
+  .weui-cells__title {
+    text-align: left;
+    text-indent: 10px;
+    background-color: #f0f0f0;
+  }
+  .weui-cell__bd p {
+    text-align: left;
+    text-indent: 10px;
+  }
+}
+</style>

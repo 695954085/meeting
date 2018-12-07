@@ -5,6 +5,9 @@ import App from './App'
 import router from './router'
 import VueRouter from 'vue-router'
 import store from './store/store'
+import VueTouch from 'vue-touch'
+// import buggyfill from 'viewport-units-buggyfill'
+// import buggyfillhacks from 'viewport-units-buggyfill/viewport-units-buggyfill.hacks'
 
 import {
   AlertPlugin,
@@ -25,6 +28,18 @@ Vue.component('x-textarea', XTextarea)
 Vue.component('group', Group)
 Vue.component('x-button', XButton)
 Vue.component('x-header', XHeader)
+
+Vue.use(VueTouch, {
+  name: 'v-touch'
+})
+
+VueTouch.config.swipe = {
+  threshold: 100 // 手指左右滑动距离
+}
+
+// buggyfill.init({
+//   hacks: buggyfillhacks
+// })
 
 Vue.config.productionTip = false
 

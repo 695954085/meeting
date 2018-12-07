@@ -1,16 +1,17 @@
 <template>
   <div class="circle-clock">
     <div class="circle-clock-cont"
-         :style="{background: background, transform: hourDeg}">
+         :style="{width: vsize,height: vsize, background: background, transform: hourDeg}">
       <div class="hour"></div>
     </div>
-    <div class="minue"></div>
+    <div class="minue"
+         :style="{left: hvsize,height: hvsize}"></div>
   </div>
 </template>
 <script>
 export default {
   name: 'Clock',
-  props: ['time'],
+  props: ['time', 'size'],
   data () {
     return {
       colorCollection: ['#FE8849', '#3384FE', '#0A4191', '#CECECE'],
@@ -34,6 +35,12 @@ export default {
       let time = parseInt(start.substring(0, 2))
       let value = time % 12 * 30
       return 'rotate(' + value + 'deg)'
+    },
+    vsize: function () {
+      return parseInt(this.size) / 7.5 + 'vw'
+    },
+    hvsize: function () {
+      return parseInt(this.size) / 15 + 'vw'
     }
   }
 }
@@ -42,8 +49,8 @@ export default {
 .circle-clock {
   position: relative;
   .circle-clock-cont {
-    width: 80px;
-    height: 80px;
+    // width: 80px;
+    // height: 80px;
     background-color: #fba;
     border-radius: 100%;
     position: relative;
@@ -58,11 +65,10 @@ export default {
   }
   .minue {
     width: 2px;
-    height: 40%;
     background-color: white;
     position: absolute;
-    bottom: 50%;
-    left: 40px;
+    top: 0;
+    //left: 40px;
   }
 }
 </style>
