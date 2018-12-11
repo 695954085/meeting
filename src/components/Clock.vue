@@ -11,7 +11,7 @@
 <script>
 export default {
   name: 'Clock',
-  props: ['time', 'size'],
+  props: ['time', 'size', 'state'],
   data () {
     return {
       colorCollection: ['#FE8849', '#3384FE', '#0A4191', '#CECECE'],
@@ -20,8 +20,12 @@ export default {
   },
   computed: {
     background: function () {
-      let start = this.time.split('-')[0]
+      // let start = this.time.split('-')[0]
+      let start = this.time
       let time = parseInt(start.substring(0, 2))
+      if (this.state === '0') {
+        return this.colorCollection[3]
+      }
       if (time < 12) {
         return this.colorCollection[0]
       } else if (time < 19) {
@@ -31,7 +35,8 @@ export default {
       }
     },
     hourDeg: function () {
-      let start = this.time.split('-')[0]
+      // let start = this.time.split('-')[0]
+      let start = this.time
       let time = parseInt(start.substring(0, 2))
       let value = time % 12 * 30
       return 'rotate(' + value + 'deg)'
@@ -64,7 +69,7 @@ export default {
     }
   }
   .minue {
-    width: 2px;
+    width: 3px;
     background-color: white;
     position: absolute;
     top: 0;

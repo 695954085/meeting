@@ -4,18 +4,29 @@
     <div class="detail-meet-main">
       <div class="detail-meet-content">
         <div class="detail-meet-up">
-          <img src="../assets/tu.png"
-               alt="">
+          <qrcode :value="detail.token"
+                  type="img"
+                  size="260"></qrcode>
         </div>
         <div class="detail-meet-down">
           <div class="detail-meet-down-inner">
-            <h3 class="detail-meet-title">{{detail.title}}</h3>
+            <h3 class="detail-meet-title">{{detail.subject}}</h3>
             <div class="detail-meet-down-left">
-              <div class="detail-meet-time">{{detail.time}}</div>
-              <div class="detail-meet-location">{{detail.location}}</div>
-              <div class="detail-meet-personList">{{detail.personList}}</div>
+              <div class="detail-meet-time">
+                <i class="icon iconfont icon-clock"></i><span>{{detail.startTime}}-{{detail.endTime}}</span></div>
+              <div class="detail-meet-location">
+                <i class="icon iconfont icon-location"></i>
+                <span>{{roomMenu[detail.room-1]}}</span>
+                <span class="detail-meet-location-direct">导航</span>
+              </div>
+              <div class="detail-meet-personList">
+                <i class="icon iconfont icon-man"></i>
+                <span>{{detail.participants}}</span>
+                <!-- <span v-for="(item,index) in detail.paticipants|exchange"
+                      :key="index">{{item}},</span> -->
+              </div>
             </div>
-            <Clock :time="detail.time"
+            <Clock :time="detail.startTime"
                    :size="clockSize"></Clock>
           </div>
         </div>
@@ -24,33 +35,50 @@
   </div>
 </template>
 <script>
+import { Qrcode } from 'vux'
 import Clock from '@/components/Clock'
+import { mapState } from 'vuex'
 export default {
   name: 'DetailMeet',
   components: {
-    Clock
+    Clock,
+    Qrcode
   },
   data () {
     return {
-      detail: {
-        title: 'ITIL项目例会',
-        time: '10:00-11:00',
-        location: '会议室1',
-        personList: ['李磊', '王鹏', '李四海']
-      },
-      clockSize: '96px'
+      clockSize: '96px',
+      roomMenu: ['会议室1', '会议室2', '会议室3']
+    }
+  },
+  filters: {
+    exchange: function (value) {
+      return value.split(',')
+    }
+  },
+  computed: {
+    ...mapState(['detailCount', 'meetingData']),
+    detail: function () {
+      let detailData = {}
+      let timeIndex = this.detailCount.timeIndex
+      let dataIndex = this.detailCount.dataIndex
+      detailData.day = this.meetingData[timeIndex].day
+      Object.assign(detailData, this.meetingData[timeIndex].data[dataIndex])
+      return detailData
     }
   }
 }
 </script>
 <style lang="less" scoped>
 .detail-meet {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-image: linear-gradient(-10deg, #05327b 0%, #105ab6 100%),
+    linear-gradient(#e9e9e9, #e9e9e9);
+  background-blend-mode: normal, normal;
   .detail-meet-main {
-    width: 750px;
-    height: 1344px;
-    background-image: linear-gradient(-10deg, #05327b 0%, #105ab6 100%),
-      linear-gradient(#e9e9e9, #e9e9e9);
-    background-blend-mode: normal, normal;
+    width: 100%;
+    height: calc(100% - 46px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -85,8 +113,7 @@ export default {
             padding: 55px 0 20px 0;
             font-family: PingFangSC-Medium;
             font-size: 38px;
-            font-weight: normal;
-            // line-height: 39px;
+            font-weight: 700;
             letter-spacing: 0px;
             color: #333333;
             border-bottom: 1px solid #cccccc;
@@ -94,6 +121,7 @@ export default {
           }
           .detail-meet-down-left {
             flex-grow: 1;
+            width: calc(100% - 96px);
             & > div {
               text-align: left;
               font-family: PingFangSC-Medium;
@@ -104,6 +132,23 @@ export default {
               letter-spacing: 0px;
               color: #333333;
               padding: 10px 0;
+              span {
+                margin-left: 10px;
+              }
+              .icon {
+                font-size: 32px;
+                color: #cecece;
+              }
+              .detail-meet-location-direct {
+                width: 62px;
+                height: 30px;
+                font-size: 32px;
+                font-weight: normal;
+                font-stretch: normal;
+                line-height: 39px;
+                letter-spacing: 0px;
+                color: #366bfd;
+              }
             }
           }
         }

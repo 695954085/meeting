@@ -5,9 +5,7 @@ import App from './App'
 import router from './router'
 import VueRouter from 'vue-router'
 import store from './store/store'
-import VueTouch from 'vue-touch'
-// import buggyfill from 'viewport-units-buggyfill'
-// import buggyfillhacks from 'viewport-units-buggyfill/viewport-units-buggyfill.hacks'
+// import VueTouch from 'vue-touch'
 
 import {
   AlertPlugin,
@@ -21,7 +19,9 @@ import {
 } from 'vux'
 
 Vue.use(AlertPlugin)
-Vue.use(ToastPlugin)
+Vue.use(ToastPlugin, {
+  position: 'bottom'
+})
 Vue.use(LoadingPlugin)
 Vue.component('x-input', XInput)
 Vue.component('x-textarea', XTextarea)
@@ -29,17 +29,13 @@ Vue.component('group', Group)
 Vue.component('x-button', XButton)
 Vue.component('x-header', XHeader)
 
-Vue.use(VueTouch, {
-  name: 'v-touch'
-})
-
-VueTouch.config.swipe = {
-  threshold: 100 // 手指左右滑动距离
-}
-
-// buggyfill.init({
-//   hacks: buggyfillhacks
+// Vue.use(VueTouch, {
+//   name: 'v-touch'
 // })
+
+// VueTouch.config.swipe = {
+//   threshold: 100 // 手指左右滑动距离
+// }
 
 Vue.config.productionTip = false
 
@@ -56,5 +52,5 @@ new Vue({
     App
   }
 })
-// window.navigator.splashscreen.hide()
+//   window.navigator.splashscreen.hide()
 // }, false)

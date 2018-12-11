@@ -44,7 +44,7 @@
            aspectratio>
         <div aspectratio-content>
           <button id="loginBtn"
-                  @click="login">登录/Login</button>
+                  @click="handleLogin">登录/Login</button>
         </div>
       </div>
       <!--
@@ -56,6 +56,13 @@
           <div class="ignore">刷脸登录</div>
         </div>
       </div> -->
+      <div class="register-message" aspectratio>
+        <div aspectratio-content>
+          <span class="register-message-info">还没有账号？</span>
+          <span class="register-message-to"
+                @click="toRegister">立即注册</span>
+        </div>
+      </div>
     </div>
     <!-- <div class="face-swiping-ctn"
          v-else-if='loginMode === "face"'
@@ -98,6 +105,9 @@
   </div>
 </template>
 <script>
+import { login } from '@/api/'
+import { mapMutations } from 'vuex'
+import { vuxInfo } from '@/utils/alert.js'
 export default {
   data () {
     return {
@@ -111,12 +121,31 @@ export default {
     }
   },
   methods: {
-    login () {
-      //  路由跳转
-      this.$router.push(`/main`)
+    ...mapMutations(['setusercard']),
+    async handleLogin () {
+      // 把
+
+      let params = new URLSearchParams()
+      params.append('usercard', this.username)
+      params.append('password', this.password)
+      let responseValue = await login(params)
+      let { status, data } = responseValue
+      if (status !== 200) {
+        vuxInfo(this, '服务器异常')
+      } else {
+        if (data === 'success') {
+          this.setusercard(this.username)
+          this.$router.push(`/main`)
+        } else {
+          vuxInfo(this, '登录失败，重新校验')
+        }
+      }
+      // this.$router.push(`/main`)
+    },
+    toRegister () {
+      this.$router.push(`/register`)
     },
     eyeOpen () {
-
     }
   }
 }
