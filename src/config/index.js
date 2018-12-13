@@ -1,5 +1,5 @@
 export default {
-  IP: 'http://10.8.6.4',
+  IP: 'http://14.23.114.194',
   PORT: 8889,
   prefix: '/appointment'
 }

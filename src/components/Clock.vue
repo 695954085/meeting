@@ -1,25 +1,27 @@
 <template>
-  <div class="circle-clock">
+  <div class="circle-clock"
+       :style="{width: vsize,height: vsize}">
     <div class="circle-clock-cont"
-         :style="{width: vsize,height: vsize, background: background, transform: hourDeg}">
+         :style="{background: background, transform: hourDeg}">
       <div class="hour"></div>
     </div>
     <div class="minue"
-         :style="{left: hvsize,height: hvsize}"></div>
+         :class="{isHalf:isHalf,isZero: !isHalf}"
+         :style="{height: hvsize}"></div>
   </div>
 </template>
 <script>
 export default {
   name: 'Clock',
   props: ['time', 'size', 'state'],
-  data () {
+  data() {
     return {
       colorCollection: ['#FE8849', '#3384FE', '#0A4191', '#CECECE'],
       currentTIme: ''
     }
   },
   computed: {
-    background: function () {
+    background: function() {
       // let start = this.time.split('-')[0]
       let start = this.time
       let time = parseInt(start.substring(0, 2))
@@ -34,18 +36,24 @@ export default {
         return this.colorCollection[2]
       }
     },
-    hourDeg: function () {
+    hourDeg: function() {
       // let start = this.time.split('-')[0]
       let start = this.time
       let time = parseInt(start.substring(0, 2))
-      let value = time % 12 * 30
+      let value = (time % 12) * 30
       return 'rotate(' + value + 'deg)'
     },
-    vsize: function () {
+    vsize: function() {
       return parseInt(this.size) / 7.5 + 'vw'
     },
-    hvsize: function () {
-      return parseInt(this.size) / 15 + 'vw'
+    hvsize: function() {
+      return (parseInt(this.size) - 10) / 15 + 'vw'
+    },
+    isHalf: function() {
+      if (this.time.substring(3, 5) !== '00') {
+        return true
+      }
+      return false
     }
   }
 }
@@ -54,26 +62,31 @@ export default {
 .circle-clock {
   position: relative;
   .circle-clock-cont {
-    // width: 80px;
-    // height: 80px;
+    width: 100px;
+    height: 100px;
     background-color: #fba;
     border-radius: 100%;
     position: relative;
     .hour {
       width: 2px;
       height: 30%;
-      background-color: white;
+      background-color: #f5f5f5;
       position: absolute;
       bottom: 50%;
       left: 50%;
     }
   }
   .minue {
-    width: 3px;
-    background-color: white;
+    width: 2px;
+    background-color: #e5e5e5;
     position: absolute;
-    top: 0;
-    //left: 40px;
+    left: 50%;
+  }
+  .minue.isHalf {
+    bottom: 6px;
+  }
+  .minue.isZero {
+    top: 10px;
   }
 }
 </style>

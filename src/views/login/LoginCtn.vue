@@ -56,7 +56,8 @@
           <div class="ignore">刷脸登录</div>
         </div>
       </div> -->
-      <div class="register-message" aspectratio>
+      <div class="register-message"
+           aspectratio>
         <div aspectratio-content>
           <span class="register-message-info">还没有账号？</span>
           <span class="register-message-to"
@@ -109,7 +110,7 @@ import { login } from '@/api/'
 import { mapMutations } from 'vuex'
 import { vuxInfo } from '@/utils/alert.js'
 export default {
-  data () {
+  data() {
     return {
       loginMode: 'key',
       username: '',
@@ -122,9 +123,7 @@ export default {
   },
   methods: {
     ...mapMutations(['setusercard']),
-    async handleLogin () {
-      // 把
-
+    async handleLogin() {
       let params = new URLSearchParams()
       params.append('usercard', this.username)
       params.append('password', this.password)
@@ -135,24 +134,27 @@ export default {
       } else {
         if (data === 'success') {
           this.setusercard(this.username)
-          this.$router.push(`/main`)
+          if (this.username === 'A0000') {
+            this.$router.push(`/supermain`)
+          } else {
+            this.$router.push(`/main`)
+          }
         } else {
           vuxInfo(this, '登录失败，重新校验')
         }
       }
       // this.$router.push(`/main`)
     },
-    toRegister () {
+    toRegister() {
       this.$router.push(`/register`)
     },
-    eyeOpen () {
-    }
+    eyeOpen() {}
   }
 }
 </script>
 
 <style lang="less">
-@import "../../styles/variables.less";
-@import "../../styles/mixins.less";
-@import "./login.less";
+@import '../../styles/variables.less';
+@import '../../styles/mixins.less';
+@import './login.less';
 </style>

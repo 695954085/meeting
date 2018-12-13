@@ -11,7 +11,7 @@ instance.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8
 // 用户登录
 export const login = params => instance.post(`${config.IP}:${config.PORT}${config.prefix}/logon`, params)
 // 用户注册
-export const register = params => instance.post(`${config.IP}:${config.PORT}${config.prefix}/logon`, params)
+export const register = params => instance.post(`${config.IP}:${config.PORT}${config.prefix}/registration`, params)
 // 请求会议列表
 export const getMeeting = usercard => instance.get(`${config.IP}:${config.PORT}${config.prefix}/appointmentRoom-list/${usercard}`)
 // 请求联系人

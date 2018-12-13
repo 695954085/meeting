@@ -52,6 +52,8 @@ module.exports = {
         'weui-tabbar__item',
         'weui-tabbar__icon',
         'weui-tabbar__label',
+        'select-person-main',
+        'meeting-main'
       ],
       minPixelValue: 1,
       mediaQuery: false

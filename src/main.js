@@ -41,8 +41,6 @@ Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 Vue.use(VueRouter)
-
-// document.addEventListener('deviceready', function () {
 new Vue({
   el: '#app',
   router,
@@ -52,5 +50,19 @@ new Vue({
     App
   }
 })
-//   window.navigator.splashscreen.hide()
-// }, false)
+// document.addEventListener(
+//   'deviceready',
+//   function() {
+//     new Vue({
+//       el: '#app',
+//       router,
+//       store,
+//       template: '<App/>',
+//       components: {
+//         App
+//       }
+//     })
+//     window.navigator.splashscreen.hide()
+//   },
+//   false
+// )

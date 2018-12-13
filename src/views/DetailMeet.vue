@@ -6,7 +6,8 @@
         <div class="detail-meet-up">
           <qrcode :value="detail.token"
                   type="img"
-                  size="260"></qrcode>
+                  class="haha"
+                  size="160"></qrcode>
         </div>
         <div class="detail-meet-down">
           <div class="detail-meet-down-inner">
@@ -44,25 +45,25 @@ export default {
     Clock,
     Qrcode
   },
-  data () {
+  data() {
     return {
       clockSize: '96px',
       roomMenu: ['会议室1', '会议室2', '会议室3']
     }
   },
   filters: {
-    exchange: function (value) {
+    exchange: function(value) {
       return value.split(',')
     }
   },
   computed: {
-    ...mapState(['detailCount', 'meetingData']),
-    detail: function () {
+    ...mapState(['detailCount', 'meetingData', 'showData']),
+    detail: function() {
       let detailData = {}
       let timeIndex = this.detailCount.timeIndex
       let dataIndex = this.detailCount.dataIndex
-      detailData.day = this.meetingData[timeIndex].day
-      Object.assign(detailData, this.meetingData[timeIndex].data[dataIndex])
+      detailData.day = this.showData[timeIndex].day
+      Object.assign(detailData, this.showData[timeIndex].data[dataIndex])
       return detailData
     }
   }
@@ -87,18 +88,14 @@ export default {
       height: 894px;
       background: #ffffff;
       .detail-meet-up {
-        height: 360px;
+        height: 444px;
         border: 1px dotted #cccccc;
         display: flex;
         justify-content: center;
         align-items: center;
-        img {
-          width: 260px;
-          height: 260px;
-        }
       }
       .detail-meet-down {
-        height: 534px;
+        height: 450px;
         display: flex;
         justify-content: center;
         align-items: center;

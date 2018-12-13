@@ -64,30 +64,41 @@ export default {
   components: {
     Actionsheet
   },
-  data () {
+  data() {
     return {
       showRoom: false,
       roomMenu: ['会议室1', '会议室2', '会议室3'],
-      mockTime: [{ startTime: '09:00', endTime: '09:30' }, { startTime: '11:00', endTime: '12:30' }]
+      mockTime: [
+        { startTime: '09:00', endTime: '09:30' },
+        { startTime: '11:00', endTime: '12:30' }
+      ]
     }
   },
   methods: {
-    ...mapMutations(['selectWeek', 'setdayTime', 'setbookTime', 'setbookLocation']),
-    handleSelectRoom () {
+    ...mapMutations([
+      'selectWeek',
+      'setdayTime',
+      'setbookTime',
+      'setbookLocation'
+    ]),
+    handleSelectRoom() {
       this.showRoom = true
     },
-    handleSelectTime (value) {
+    handleSelectTime(value) {
       let tempBool = false
       let a = this.dayTime.find(this.hasTimeText(value))
       let b = this.dayTime.filter(this.hasTimeAble(false))
       if (a.isAble) {
         if (this.bookTime.startTime && !this.bookTime.endTime) {
-          let selectspace = Time.getTimeSpace({ startTime: this.bookTime.startTime, endTime: value })
+          let selectspace = Time.getTimeSpace({
+            startTime: this.bookTime.startTime,
+            endTime: value
+          })
           for (let i = 0; i < selectspace.length; i++) {
             let c = b.some(this.hasTimeText(selectspace[i]))
             if (c) {
               tempBool = true
-              break
+              break;
             }
           }
           if (!tempBool) {
@@ -98,24 +109,26 @@ export default {
         }
       }
     },
-    certainBookTime () {
+    certainBookTime() {
       this.$router.push(`/addMeet`)
     },
-    hasTimeText (text) {
+    hasTimeText(text) {
       return character => character.text === text
     },
-    hasTimeAble (isAble) {
+    hasTimeAble(isAble) {
       return character => character.isAble === false
     },
-    selectRoom (index) {
+    selectRoom(index) {
       this.setbookLocation(index + 1)
       // 更改房间之后也得重新查一次更新数据
       this.queryState()
     },
     // 请求对应日期房间数据
-    async queryState () {
+    async queryState() {
       // 请求数据状态
-      let comitDate = `${this.currentday.year}/${this.currentday.month}/${this.currentday.day}`
+      let comitDate = `${this.currentday.year}/${this.currentday.month}/${
+        this.currentday.day
+      }`
       let responseValue = await getBookTimeSpace(comitDate, this.bookLocation)
       let { data, status } = responseValue
       if (status !== 200) {
@@ -127,35 +140,41 @@ export default {
       // let a = [{ startTime: '13:00', endTime: '15:30' }]
       // this.setdayTime(a)
     },
-    async handleSelectDay (index) {
+    async handleSelectDay(index) {
       // 设置选中日期
       this.selectWeek(index)
       this.queryState()
     },
-    setTodayData (value) {
+    setTodayData(value) {
       this.setdayTime(value)
     }
   },
-  async mounted () {
+  async mounted() {
     this.queryState()
     // this.setTodayData(this.mockTime)
   },
   computed: {
-    ...mapState(['weekData', 'dayTime', 'bookTime', 'currentday', 'bookLocation']),
-    roomName: function () {
+    ...mapState([
+      'weekData',
+      'dayTime',
+      'bookTime',
+      'currentday',
+      'bookLocation'
+    ]),
+    roomName: function() {
       return this.roomMenu[this.bookLocation - 1]
     },
-    weekDetail: function () {
+    weekDetail: function() {
       return this.weekData
     },
-    timeSlot: function () {
+    timeSlot: function() {
       let cutSlot = []
       for (let i = 0; i < this.dayTime.length; i += 4) {
         cutSlot.push(this.dayTime.slice(i, i + 4))
       }
       return cutSlot
     },
-    getCurrentDay: function () {
+    getCurrentDay: function() {
       let monthValue = this.currentday.month + '月'
       let dayValue = this.currentday.day + '日'
       let weekValue = '周' + this.currentday.week
@@ -164,7 +183,7 @@ export default {
     }
   },
   filters: {
-    judgeIsToday: function (value) {
+    judgeIsToday: function(value) {
       let today = new Date()
       if (value === today.getDate()) {
         return '今'
@@ -279,7 +298,7 @@ export default {
         }
         .select-time-inner.select {
           // background-color: #bae9ff;
-          background-color: #00aeff;
+          background-color: #1978fe;
         }
       }
     }

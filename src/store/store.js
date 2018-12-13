@@ -7,19 +7,24 @@ Vue.use(Vuex)
 
 const state = {
   usercard: 'A1002',
-  meetingData: [{
-    'day': '1970-00-01',
-    'data': [{
-      token: '53815dcd',
-      state: '1',
-      subject: '诸神的黄昏',
-      startTime: '10:00',
-      endTime: '11:00',
-      room: '2',
-      participants: '宙斯,雅典娜,普罗米修斯'
+  meetingData: [
+    {
+      day: '1970-00-01',
+      data: [
+        {
+          token: '53815dcd',
+          state: '0',
+          subject: '诸神的黄昏',
+          startTime: '10:00',
+          endTime: '11:00',
+          room: '2',
+          participants: '宙斯,雅典娜,普罗米修斯'
+        }
+      ]
     }
-    ]
-  }],
+  ],
+  filterData: [], // 孩子和meetingData格式一致，存放是否完成分类
+  showData: [],
   detailCount: {
     timeIndex: 0,
     dataIndex: 0
@@ -41,24 +46,20 @@ const mutations = {
     state.usercard = data
   },
   setmeetingData: (state, data) => {
-    // 将请求的数据转换为指定格式
-    let exchangeDate = []
-    let exchangeData = []
-    data.forEach(element => {
-      if (!exchangeDate.includes(element.bookDate)) {
-        exchangeDate.push(element.bookDate)
-      }
-    })
-
-    exchangeDate = Time.degressDate(exchangeDate)
-    for (let i = 0; i < exchangeDate.length; i++) {
-      let dataArray = data.filter(character => character.bookDate === exchangeDate[i])
-      let temp = {}
-      temp.day = exchangeDate[i]
-      temp.data = dataArray
-      exchangeData.push(temp)
+    let finishArray = data.filter(character => character.state === '0')
+    let unfinishArray = data.filter(character => character.state === '1')
+    state.filterData[0] = handlemeetingData(finishArray)
+    state.filterData[1] = handlemeetingData(unfinishArray)
+    state.meetingData = handlemeetingData(data)
+    // 默认数据是未完成的
+    state.showData = state.filterData[1]
+  },
+  setshowData: (state, data) => {
+    if (data === 1) {
+      state.showData = state.filterData[0]
+    } else {
+      state.showData = state.filterData[1]
     }
-    state.meetingData = exchangeData
   },
   setdetailCount: (stete, data) => {
     state.detailCount = data
@@ -90,7 +91,7 @@ const mutations = {
         }
         if (state.dayTime[i].text === element.endTime) {
           setIndex.push(i)
-          break
+          break;
         }
       }
       // 设置一下状态
@@ -134,11 +135,35 @@ const mutations = {
       }
     }
   },
-  clearbookTime: (state) => {
+  clearbookTime: state => {
     // 清空预约时间段
     state.bookTime = {}
   }
 }
+
+const handlemeetingData = data => {
+  // 将请求的数据转换为指定格式
+  let exchangeDate = []
+  let exchangeData = []
+  data.forEach(element => {
+    if (!exchangeDate.includes(element.bookDate)) {
+      exchangeDate.push(element.bookDate)
+    }
+  })
+
+  exchangeDate = Time.degressDate(exchangeDate)
+  for (let i = 0; i < exchangeDate.length; i++) {
+    let dataArray = data.filter(
+      character => character.bookDate === exchangeDate[i]
+    )
+    let temp = {}
+    temp.day = exchangeDate[i]
+    temp.data = dataArray
+    exchangeData.push(temp)
+  }
+  return exchangeData
+  // state.meetingData = exchangeData
+};
 
 const store = new Vuex.Store({
   state,

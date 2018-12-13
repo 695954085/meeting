@@ -14,8 +14,8 @@ const getTime = () => {
     }
   }
   return timeSlot
-}
-const getTimeSpace = (data) => {
+};
+const getTimeSpace = data => {
   let startTime = data.startTime
   let endTime = data.endTime
   if (!startTime || !endTime) {
@@ -41,9 +41,9 @@ const getTimeSpace = (data) => {
     timeSpace.pop()
   }
   return timeSpace
-}
+};
 // 验证时间格式,正确返回true
-const compareTime = (data) => {
+const compareTime = data => {
   let startTime = data.startTime
   let endTime = data.endTime
   if (!startTime || !endTime) {
@@ -53,30 +53,34 @@ const compareTime = (data) => {
   let start = startTime.split(':')
   let end = endTime.split(':')
 
-  if (parseInt(end[0]) === parseInt(start[0]) &&
-    parseInt(end[1]) > parseInt(start[1])) {
+  if (
+    parseInt(end[0]) === parseInt(start[0]) &&
+    parseInt(end[1]) > parseInt(start[1])
+  ) {
     return true
   }
   if (parseInt(end[0]) > parseInt(start[0])) {
     return true
   }
   return false
-}
+};
 // 日期字符串升序排序
-const degressDate = (data) => {
+const degressDate = data => {
   let exchange = []
   let returnValue = []
   data.forEach(element => {
     exchange.push(new Date(element))
   })
-  exchange.sort(function (a, b) {
+  exchange.sort(function(a, b) {
     return a > b ? 1 : -1
   })
   exchange.forEach(element => {
-    returnValue.push(`${element.getFullYear()}/${element.getMonth() + 1}/${element.getDate()}`)
+    returnValue.push(
+      `${element.getFullYear()}/${element.getMonth() + 1}/${element.getDate()}`
+    )
   })
   return returnValue
-}
+};
 export default {
   getTime,
   getTimeSpace,

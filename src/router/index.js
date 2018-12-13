@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import Login from '@/views/login/LoginCtn'
 import Register from '@/views/login/Register'
 import Main from '@/views/Main'
+import SuperMain from '@/views/SuperMain'
 import meeting from '@/views/meeting'
 import AddMeet from '@/views/AddMeet'
 import SelectPerson from '@/views/SelectPerson'
@@ -28,7 +29,13 @@ export default new Router({
       path: '/main',
       name: 'Main',
       component: Main
-    }, {
+    },
+    {
+      path: '/supermain',
+      name: 'SuperMain',
+      component: SuperMain
+    },
+    {
       path: '/meeting',
       name: 'meeting',
       component: meeting
@@ -37,15 +44,18 @@ export default new Router({
       path: '/addMeet',
       name: 'AddMeet',
       component: AddMeet
-    }, {
+    },
+    {
       path: '/selectPerson',
       name: 'SelectPerson',
       component: SelectPerson
-    }, {
+    },
+    {
       path: '/selectTime',
       name: 'SelectTime',
       component: SelectTime
-    }, {
+    },
+    {
       path: '/detailMeet',
       name: 'DetailMeet',
       component: DetailMeet
