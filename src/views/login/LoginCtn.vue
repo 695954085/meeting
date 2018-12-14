@@ -122,7 +122,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setusercard']),
+    ...mapMutations(['setuser']),
     async handleLogin() {
       let params = new URLSearchParams()
       params.append('usercard', this.username)
@@ -132,15 +132,15 @@ export default {
       if (status !== 200) {
         vuxInfo(this, '服务器异常')
       } else {
-        if (data === 'success') {
-          this.setusercard(this.username)
+        if (data.status === 'success') {
+          this.setuser(data.data)
           if (this.username === 'A0000') {
             this.$router.push(`/supermain`)
           } else {
             this.$router.push(`/main`)
           }
         } else {
-          vuxInfo(this, '登录失败，重新校验')
+          vuxInfo(this, data.msg)
         }
       }
       // this.$router.push(`/main`)

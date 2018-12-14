@@ -6,7 +6,10 @@ import Time from '../utils/time.js'
 Vue.use(Vuex)
 
 const state = {
-  usercard: 'A1002',
+  user: {
+    usercard: '',
+    username: ''
+  },
   meetingData: [
     {
       day: '1970-00-01',
@@ -42,8 +45,8 @@ const state = {
 // dayTime: [{ startTime: '09:00', endTime: '10:00' }, { startTime: '11:00', endTime: '12:30' }]
 
 const mutations = {
-  setusercard: (state, data) => {
-    state.usercard = data
+  setuser: (state, data) => {
+    state.user = data
   },
   setmeetingData: (state, data) => {
     let finishArray = data.filter(character => character.state === '0')

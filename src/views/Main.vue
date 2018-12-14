@@ -38,7 +38,7 @@
            class="icon iconfont icon-yinzhang"></i>
         <span slot="label">发现</span>
       </tabbar-item>
-      <tabbar-item>
+      <tabbar-item :link="{path: '/meeting', replace: true}">
         <i slot="icon"
            class="icon iconfont icon-man"></i>
         <span slot="label">我的</span>
@@ -58,34 +58,43 @@ export default {
     Grid,
     GridItem
   },
-  data () {
+  data() {
     return {
       workData: [
-        { name: '会议管理',
+        {
+          name: '会议管理',
           path: require('../assets/demo/icon_nav_button.png'),
-          link: '/meeting' },
-        { name: '办公管理',
+          link: '/meeting'
+        },
+        {
+          name: '办公管理',
           path: require('../assets/demo/icon_nav_button.png'),
-          link: '/meeting' },
-        { name: '报销管理',
+          link: '/meeting'
+        },
+        {
+          name: '报销管理',
           path: require('../assets/demo/icon_nav_button.png'),
-          link: '/meeting' }
+          link: '/meeting'
+        }
       ],
       lifeData: [
         { name: '请假', path: require('../assets/demo/icon_nav_button.png') },
         { name: '项目', path: require('../assets/demo/icon_nav_button.png') },
         { name: '合同', path: require('../assets/demo/icon_nav_button.png') },
         { name: '出差', path: require('../assets/demo/icon_nav_button.png') },
-        { name: '外出登记', path: require('../assets/demo/icon_nav_button.png') },
-        { name: '宿舍入住', path: require('../assets/demo/icon_nav_button.png') }
+        {
+          name: '外出登记',
+          path: require('../assets/demo/icon_nav_button.png')
+        },
+        {
+          name: '宿舍入住',
+          path: require('../assets/demo/icon_nav_button.png')
+        }
       ]
     }
   },
-  methods: {
-  },
-  filters: {
-  }
-
+  methods: {},
+  filters: {}
 }
 </script>
 <style lang="less">

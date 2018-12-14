@@ -83,7 +83,7 @@ export default {
       this.$router.push(`/detailMeet`)
     },
     async queryMeetingData() {
-      let responseValue = await getMeeting(this.usercard)
+      let responseValue = await getMeeting(this.user.usercard)
       console.log(responseValue)
       let { status, data } = responseValue
       if (status !== 200) {
@@ -98,7 +98,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['meetingData', 'usercard', 'showData']),
+    ...mapState(['meetingData', 'user', 'showData']),
     loadData: function() {
       return this.showData
     }

@@ -37,6 +37,11 @@ Vue.component('x-header', XHeader)
 //   threshold: 100 // 手指左右滑动距离
 // }
 
+function onBackKeyDown(e) {
+  // 吃掉返回按钮
+  // e.preventDefault()
+}
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
@@ -53,6 +58,7 @@ new Vue({
 // document.addEventListener(
 //   'deviceready',
 //   function() {
+//     document.addEventListener('backbutton', onBackKeyDown, false)
 //     new Vue({
 //       el: '#app',
 //       router,

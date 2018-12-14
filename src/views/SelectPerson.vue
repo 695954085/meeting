@@ -8,15 +8,15 @@
           <x-icon type="ios-search"
                   class="icon-search"></x-icon>
           <input type="text"
-                placeholder="搜索"
-                v-model="searchText"
-                @change="handleSearch" />
+                 placeholder="搜索"
+                 v-model="searchText"
+                 @change="handleSearch" />
         </div>
         <div class="select-person-list">
           <div class="select-person-list-inner">
             <div class="select-persion-item"
-                v-for="item in bookPersonList"
-                :key="item">
+                 v-for="item in bookPersonList"
+                 :key="item">
               <span>{{item}}</span>
               <x-icon type="ios-close-empty"
                       size="30"
@@ -26,11 +26,11 @@
         </div>
       </div>
       <div v-show="!showSearch"
-          class="select-person-directory">
+           class="select-person-directory">
         <Directory :personData="personData"></Directory>
       </div>
       <div v-show="showSearch"
-          class="search-person-directory">
+           class="search-person-directory">
         <SearchDict :personData="searchData"></SearchDict>
       </div>
     </div>
@@ -48,7 +48,7 @@ export default {
     Directory,
     SearchDict
   },
-  data () {
+  data() {
     return {
       count: 0,
       searchText: '',
@@ -58,7 +58,7 @@ export default {
       // personData: ['阿本', '阿雄', '学校', '草草', '曹超', '胡小风', '方大', '校学', '玛尼', '风小', '范进']
     }
   },
-  async mounted () {
+  async mounted() {
     let responseValue = await getLinkMan('all')
     let { status, data } = responseValue
     console.log(responseValue)
@@ -66,7 +66,12 @@ export default {
       vuxInfo(this, '服务器异常')
     } else {
       if (data.length > 0) {
+        // 设置联系人
         this.personData = data
+        // 设置一下登录人勾选
+        let bookData = []
+        bookData.push(this.user.username)
+        this.setbookPersonList(bookData)
       } else {
         vuxInfo(this, '联系人列表查询为空')
       }
@@ -74,16 +79,16 @@ export default {
   },
   methods: {
     ...mapMutations(['setbookPersonList']),
-    certainBookPersonList () {
+    certainBookPersonList() {
       this.$router.push(`/addMeet`)
     },
-    removePerson (value) {
+    removePerson(value) {
       let index = this.bookPersonList.indexOf(value)
       let nList = this.bookPersonList
       nList.splice(index, 1)
       this.setbookPersonList(nList)
     },
-    handleSearch () {
+    handleSearch() {
       console.log(this.searchText)
       // filter data
       // this.personData.forEach(element => {
@@ -92,10 +97,9 @@ export default {
       //   }
       // })
     }
-
   },
   computed: {
-    ...mapState(['bookPersonList'])
+    ...mapState(['bookPersonList', 'user'])
   }
 }
 </script>
@@ -105,7 +109,7 @@ export default {
   height: 100vh;
   background: #f0f0f0;
   overflow: hidden;
-  .select-person-main{
+  .select-person-main {
     height: calc(100% - 46px);
   }
   .select-person-fixpart {
