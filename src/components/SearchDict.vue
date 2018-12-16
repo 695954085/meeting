@@ -20,36 +20,33 @@ export default {
     Checklist
   },
   props: ['personData'],
-  data () {
-    return {
-    }
+  data() {
+    return {}
   },
   filters: {
-    toUpperCase: function (value) {
+    toUpperCase: function(value) {
       return value.toUpperCase()
     }
   },
   methods: {
-    ...mapMutations(['setbookPersonList']),
-    change (val, label) {
-    }
+    ...mapMutations('metting', ['setbookPersonList']),
+    change(val, label) {}
   },
   computed: {
-    ...mapState(['bookPersonList']),
-    dealData: function () {
+    ...mapState('metting', ['bookPersonList']),
+    dealData: function() {
       let data = Pingyin.pySegSort(this.personData)
       return data
     },
     personList: {
-      get () {
+      get() {
         return this.bookPersonList
       },
-      set (val) {
+      set(val) {
         this.$store.commit('setbookPersonList', val)
       }
     }
   }
-
 }
 </script>
 <style lang="less">

@@ -19,7 +19,7 @@
           <input type="text"
                  placeholder="用户名/Username"
                  id="loginUserName"
-                 v-model="username">
+                 v-model="usercard">
           <span class="tips"
                 v-show="usernameNotNull">用户名为空！</span>
         </div>
@@ -36,7 +36,8 @@
                 v-show="passwordNotNull">密码为空！</span>
         </div>
       </div>
-      <div><input type="checkbox">
+      <div><input type="checkbox"
+               v-model="isRemember">
         <label>记住密码</label>
         <span>忘记密码？</span>
       </div>
@@ -113,19 +114,28 @@ export default {
   data() {
     return {
       loginMode: 'key',
-      username: '',
+      usercard: '',
       password: '',
       usernameNotNull: false,
       passwordNotNull: false,
       iconEye: 'icon-close-eyes',
-      loginPasswordType: 'password'
+      loginPasswordType: 'password',
+      isRemember: false
     }
   },
   methods: {
-    ...mapMutations(['setuser']),
+    ...mapMutations('metting', ['setuser']),
     async handleLogin() {
+      // 是否记住密码
+      if (this.isRemember) {
+        localStorage.setItem('usercard', this.usercard)
+        localStorage.setItem('password', this.password)
+      } else {
+        localStorage.setItem('usercard', '')
+        localStorage.setItem('password', '')
+      }
       let params = new URLSearchParams()
-      params.append('usercard', this.username)
+      params.append('usercard', this.usercard)
       params.append('password', this.password)
       let responseValue = await login(params)
       let { status, data } = responseValue
@@ -148,7 +158,21 @@ export default {
     toRegister() {
       this.$router.push(`/register`)
     },
-    eyeOpen() {}
+    eyeOpen() {
+      if (this.loginPasswordType === 'password') {
+        this.loginPasswordType = 'text'
+      } else {
+        this.loginPasswordType = 'password'
+      }
+    }
+  },
+  mounted() {
+    let usercard = localStorage.getItem('usercard')
+    let password = localStorage.getItem('password')
+    if (usercard !== '' && password !== '') {
+      this.usercard = usercard
+      this.password = password
+    }
   }
 }
 </script>

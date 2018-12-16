@@ -86,7 +86,13 @@ export default {
     }
   },
   methods: {
-    eyeOpen() {},
+    eyeOpen() {
+      if (this.loginPasswordType === 'password') {
+        this.loginPasswordType = 'text'
+      } else {
+        this.loginPasswordType = 'password'
+      }
+    },
     async handleRegister() {
       console.log(this.usercard + this.username + this.password)
       if (
@@ -95,11 +101,11 @@ export default {
         this.username === ''
       ) {
         vuxInfo(this, '请完善后再提交~~')
-        return
+        return;
       }
       if (this.password !== this.password2) {
         vuxInfo(this, '密码不一致~~')
-        return
+        return;
       }
       let params = new URLSearchParams()
       params.append('usercard', this.usercard)

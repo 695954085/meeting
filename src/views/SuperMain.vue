@@ -4,7 +4,7 @@
     <div class="superMain-cont">
       <qrcode :value="this.token"
               type="img"
-              size="260"></qrcode>
+              :size="260"></qrcode>
     </div>
   </div>
 </template>

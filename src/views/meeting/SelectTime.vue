@@ -56,7 +56,7 @@
 <script>
 import { Actionsheet } from 'vux'
 import { mapMutations, mapState } from 'vuex'
-import Time from '../utils/time.js'
+import Time from '@/utils/time.js'
 import { getBookTimeSpace } from '@/api/'
 import { vuxInfo } from '@/utils/alert.js'
 export default {
@@ -75,7 +75,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations([
+    ...mapMutations('metting', [
       'selectWeek',
       'setdayTime',
       'setbookTime',
@@ -154,7 +154,7 @@ export default {
     // this.setTodayData(this.mockTime)
   },
   computed: {
-    ...mapState([
+    ...mapState('metting', [
       'weekData',
       'dayTime',
       'bookTime',

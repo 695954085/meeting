@@ -39,7 +39,7 @@ Vue.component('x-header', XHeader)
 
 function onBackKeyDown(e) {
   // 吃掉返回按钮
-  // e.preventDefault()
+  e.preventDefault()
 }
 
 Vue.config.productionTip = false

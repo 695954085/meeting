@@ -47,43 +47,54 @@ import { vuxInfo } from '@/utils/alert.js'
 export default {
   name: 'AddMeet',
   components: {
-    Actionsheet, Cell
+    Actionsheet,
+    Cell
   },
-  data () {
+  data() {
     return {
       show1: false,
       roomMenu: ['会议室1', '会议室2', '会议室3']
     }
   },
   methods: {
-    ...mapMutations(['setbookLocation', 'setbookPersonList', 'setbookTitle', 'clearbookTime']),
-    handleReturn () {
+    ...mapMutations('metting', [
+      'setbookLocation',
+      'setbookPersonList',
+      'setbookTitle',
+      'clearbookTime'
+    ]),
+    handleReturn() {
       this.$router.push(`/meeting`)
     },
-    async handleComplate () {
+    async handleComplate() {
       let params = new URLSearchParams()
       // 提交之前校验一下
       if (this.subject.trim() === '') {
         vuxInfo(this, '请先输入会议主题')
-        return
+        return;
       }
       if (this.bookLocation === 0) {
         vuxInfo(this, '请先选择会议室')
-        return
+        return;
       }
-      let comitDay = this.currentday.year + '/' + this.currentday.month + '/' + this.currentday.day
+      let comitDay =
+        this.currentday.year +
+        '/' +
+        this.currentday.month +
+        '/' +
+        this.currentday.day
       let myTime = `${comitDay} ${this.bookTime.startTime}`
       let current = new Date()
       var compareData = new Date(Date.parse(myTime))
       if (compareData < current) {
         vuxInfo(this, '该时间段不合法,选择正确时间段')
-        return
+        return;
       }
 
       let comitPersonList = this.exchangPersonList()
       if (comitPersonList === '请选择') {
         vuxInfo(this, '参会人员不能为空,请选择')
-        return
+        return;
       }
       params.append('subject', this.subject)
       params.append('room', this.bookLocation)
@@ -104,13 +115,13 @@ export default {
           this.setbookLocation(0)
           this.clearbookTime()
           this.setbookPersonList([])
-          // this.$router.push(`/meeting`)
+          this.$router.push(`/meeting`)
         } else {
           vuxInfo(this, data.msg)
         }
       }
     },
-    exchangPersonList () {
+    exchangPersonList() {
       let returnValue = '请选择'
       if (this.bookPersonList.length !== 0) {
         returnValue = ''
@@ -121,53 +132,65 @@ export default {
       }
       return returnValue
     },
-    handleSelectRoom () {
+    handleSelectRoom() {
       this.show1 = true
     },
-    handlePickRoom (index) {
+    handlePickRoom(index) {
       this.setbookLocation(index + 1)
     },
-    handleSelectTime () {
+    handleSelectTime() {
       // 没有选择地点直接进入时默认选择第一项
       if (this.bookLocation === 0) {
         this.setbookLocation(1)
       }
       this.$router.push(`/selectTime`)
     },
-    handleSelectPerson () {
+    handleSelectPerson() {
       this.$router.push(`/selectPerson`)
     }
   },
   computed: {
-    ...mapState(['bookPersonList', 'bookTime', 'currentday', 'bookLocation', 'bookTitle']),
+    ...mapState('metting', [
+      'bookPersonList',
+      'bookTime',
+      'currentday',
+      'bookLocation',
+      'bookTitle'
+    ]),
     subject: {
-      get () {
+      get() {
         return this.bookTitle
       },
-      set (val) {
-        this.$store.commit('setbookTitle', val)
+      set(val) {
+        this.setbookTitle(val)
       }
     },
-    personValue: function () {
+    personValue: function() {
       let returnValue = this.exchangPersonList()
       return returnValue
     },
-    timeValue: function () {
+    timeValue: function() {
       let returnValue = '请选择'
       if (this.bookTime.startTime && this.bookTime.endTime) {
-        returnValue = '周' + this.currentday.week + '(' + this.currentday.month + '/' + this.currentday.day + ')'
+        returnValue =
+          '周' +
+          this.currentday.week +
+          '(' +
+          this.currentday.month +
+          '/' +
+          this.currentday.day +
+          ')'
         returnValue += this.bookTime.startTime + '-' + this.bookTime.endTime
       }
       return returnValue
     },
-    roomValue: function () {
+    roomValue: function() {
       if (this.bookLocation === 0) {
         return '请选择'
       }
       return this.roomMenu[this.bookLocation - 1]
     }
   }
-
 }
 </script>
 <style lang="less">
