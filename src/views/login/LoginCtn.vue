@@ -1,7 +1,6 @@
 <template>
   <div class="login-ctn">
-    <div class="login-info-ctn"
-         v-if='loginMode === "key"'>
+    <div class="login-info-ctn">
       <div class="login-title-img"
            aspectratio>
         <div aspectratio-content>
@@ -20,8 +19,6 @@
                  placeholder="用户名/Username"
                  id="loginUserName"
                  v-model="username">
-          <span class="tips"
-                v-show="usernameNotNull">用户名为空！</span>
         </div>
       </div>
       <div aspectratio>
@@ -32,8 +29,6 @@
                  v-model="password">
           <i :class="['icon',iconEye]"
              @click="eyeOpen"></i>
-          <span class="tips"
-                v-show="passwordNotNull">密码为空！</span>
         </div>
       </div>
       <div><input type="checkbox">
@@ -47,15 +42,6 @@
                   @click="handleLogin">登录/Login</button>
         </div>
       </div>
-      <!--
-      <div class="face-swiping-assist"
-           aspectratio
-           @click="loginMode = 'face'">
-        <div aspectratio-content>
-          <i class="icon icon-face"></i>
-          <div class="ignore">刷脸登录</div>
-        </div>
-      </div> -->
       <div class="register-message"
            aspectratio>
         <div aspectratio-content>
@@ -65,70 +51,52 @@
         </div>
       </div>
     </div>
-    <!-- <div class="face-swiping-ctn"
-         v-else-if='loginMode === "face"'
-         ref="faceswipingctnRef">
-      <span class="face__info"
-            ref="faceInfo">正在刷脸，别走开</span>
-      <div id="video"
-           ref="videoRef"
-           aspectratio></div>
-    </div>
-    <div class="login-fail-ctn"
-         v-else
-         aspectratio>
-      <div aspectratio-content>
-        <div class="login-fail-ctt">
-          <div class="fail-title">
-            <i class="icon icon-fail"></i>登录失败</div>
-          <div class="fail-detail-ctn">{{failMessage}}</div>
-          <div class="fail-operations-ctn">
-            <div class="reLogin-div"
-                 aspectratio>
-              <div aspectratio-content>
-                <button id="reLogin"
-                        class="reLogin"
-                        @click="loginMode = 'face'">重新登录</button>
-              </div>
-            </div>
-            <div class="quitLogin-div"
-                 aspectratio>
-              <div aspectratio-content>
-                <button id="quitLogin"
-                        class="quitLogin"
-                        @click="quit()">退出登录</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 <script>
 import { login } from '@/api/'
 import { mapMutations } from 'vuex'
 import { vuxInfo } from '@/utils/alert.js'
+import Joi from 'joi'
+import loginSchema from './login.schema'
+
 export default {
-  data() {
+  data () {
     return {
       loginMode: 'key',
       username: '',
       password: '',
-      usernameNotNull: false,
-      passwordNotNull: false,
       iconEye: 'icon-close-eyes',
       loginPasswordType: 'password'
     }
   },
   methods: {
     ...mapMutations(['setuser']),
-    async handleLogin() {
-      let params = new URLSearchParams()
-      params.append('usercard', this.username)
-      params.append('password', this.password)
-      let responseValue = await login(params)
-      let { status, data } = responseValue
+    /**
+     * 登录
+     */
+    async handleLogin () {
+      const { error } = Joi.validate({
+        username: this.username,
+        password: this.password
+      }, loginSchema)
+      if (error && error.details.length >= 1) {
+        const detail = error.details[0]
+        const message = detail.message
+        vuxInfo(this, message)
+        return
+      }
+      let responseValue
+      try {
+        const params = new URLSearchParams()
+        params.append('usercard', this.username)
+        params.append('password', this.password)
+        responseValue = await login(params)
+      } catch (err) {
+        vuxInfo(this, err)
+        return
+      }
+      const { status, data } = responseValue
       if (status !== 200) {
         vuxInfo(this, '服务器异常')
       } else {
@@ -145,16 +113,16 @@ export default {
       }
       // this.$router.push(`/main`)
     },
-    toRegister() {
+    toRegister () {
       this.$router.push(`/register`)
     },
-    eyeOpen() {}
+    eyeOpen () { }
   }
 }
 </script>
 
 <style lang="less">
-@import '../../styles/variables.less';
-@import '../../styles/mixins.less';
-@import './login.less';
+@import "../../styles/variables.less";
+@import "../../styles/mixins.less";
+@import "./login.less";
 </style>
