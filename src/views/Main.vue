@@ -48,7 +48,6 @@
 </template>
 <script>
 import { XHeader, Tabbar, TabbarItem, Grid, GridItem } from 'vux'
-import { mapMutations, mapState } from 'vuex'
 export default {
   name: 'Main',
   components: {
