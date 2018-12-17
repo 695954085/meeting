@@ -14,7 +14,7 @@ const getTime = () => {
     }
   }
   return timeSlot
-};
+}
 const getTimeSpace = data => {
   let startTime = data.startTime
   let endTime = data.endTime
@@ -41,7 +41,7 @@ const getTimeSpace = data => {
     timeSpace.pop()
   }
   return timeSpace
-};
+}
 // 验证时间格式,正确返回true
 const compareTime = data => {
   let startTime = data.startTime
@@ -63,7 +63,7 @@ const compareTime = data => {
     return true
   }
   return false
-};
+}
 // 日期字符串升序排序
 const degressDate = data => {
   let exchange = []
@@ -71,7 +71,7 @@ const degressDate = data => {
   data.forEach(element => {
     exchange.push(new Date(element))
   })
-  exchange.sort(function(a, b) {
+  exchange.sort(function (a, b) {
     return a > b ? 1 : -1
   })
   exchange.forEach(element => {
@@ -80,7 +80,7 @@ const degressDate = data => {
     )
   })
   return returnValue
-};
+}
 export default {
   getTime,
   getTimeSpace,
