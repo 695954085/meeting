@@ -20,19 +20,17 @@ export default {
     Checklist
   },
   props: ['personData'],
-  data () {
-    return {
-    }
+  data() {
+    return {}
   },
   filters: {
-    toUpperCase: function (value) {
+    toUpperCase: function(value) {
       return value.toUpperCase()
     }
   },
   methods: {
-    ...mapMutations(['setbookPersonList']),
-    change (val, label) {
-      console.log('haha')
+    ...mapMutations('metting', ['setbookPersonList']),
+    change(val, label) {
       // if (val.length !== 0) {
       //   console.log(this.personList)
       //   this.setbookPersonList(this.personList)
@@ -40,21 +38,20 @@ export default {
     }
   },
   computed: {
-    ...mapState(['bookPersonList']),
-    dealData: function () {
+    ...mapState('metting', ['bookPersonList']),
+    dealData: function() {
       let data = Pingyin.pySegSort(this.personData)
       return data
     },
     personList: {
-      get () {
+      get() {
         return this.bookPersonList
       },
-      set (val) {
-        this.$store.commit('setbookPersonList', val)
+      set(val) {
+        this.setbookPersonList(val)
       }
     }
   }
-
 }
 </script>
 <style lang="less">

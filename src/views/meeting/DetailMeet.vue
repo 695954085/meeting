@@ -7,7 +7,7 @@
           <qrcode :value="detail.token"
                   type="img"
                   class="haha"
-                  size="160"></qrcode>
+                  :size="160"></qrcode>
         </div>
         <div class="detail-meet-down">
           <div class="detail-meet-down-inner">
@@ -32,6 +32,14 @@
           </div>
         </div>
       </div>
+      <div class="detail-meet-light">
+        <div class="detail-meet-light-title">会议室顶灯</div>
+        <input class='switch-component'
+               type='checkbox'
+               v-model="lightState"
+               @change="handleLight"
+               :disabled="isUseful">
+      </div>
     </div>
   </div>
 </template>
@@ -39,6 +47,7 @@
 import { Qrcode } from 'vux'
 import Clock from '@/components/Clock'
 import { mapState } from 'vuex'
+import { lightControl } from '@/api/'
 export default {
   name: 'DetailMeet',
   components: {
@@ -48,7 +57,9 @@ export default {
   data() {
     return {
       clockSize: '96px',
-      roomMenu: ['会议室1', '会议室2', '会议室3']
+      roomMenu: ['会议室1', '会议室2', '会议室3'],
+      lightState: false,
+      isUseful: true
     }
   },
   filters: {
@@ -56,8 +67,34 @@ export default {
       return value.split(',')
     }
   },
+  mounted() {
+    let timeIndex = this.detailCount.timeIndex
+    let dataIndex = this.detailCount.dataIndex
+    let comitDay = this.showData[timeIndex].day
+    let startTime = this.showData[timeIndex].data[dataIndex].startTime
+    let endTime = this.showData[timeIndex].data[dataIndex].endTime
+    let myStartTime = `${comitDay} ${startTime}`
+    let myEndTime = `${comitDay} ${endTime}`
+    let current = new Date()
+    var compareS = new Date(Date.parse(myStartTime))
+    var compareL = new Date(Date.parse(myEndTime))
+    if (current <= compareL && current >= compareS) {
+      this.isUseful = false
+    }
+  },
+  methods: {
+    async handleLight() {
+      let timeIndex = this.detailCount.timeIndex
+      let dataIndex = this.detailCount.dataIndex
+      let params = new URLSearchParams()
+      params.append('room', this.showData[timeIndex].data[dataIndex].room)
+      params.append('method', this.lightState ? 'Open' : 'Close')
+      let responseValue = await lightControl(params)
+      console.log(responseValue)
+    }
+  },
   computed: {
-    ...mapState(['detailCount', 'meetingData', 'showData']),
+    ...mapState('metting', ['detailCount', 'meetingData', 'showData']),
     detail: function() {
       let detailData = {}
       let timeIndex = this.detailCount.timeIndex
@@ -80,12 +117,10 @@ export default {
   .detail-meet-main {
     width: 100%;
     height: calc(100% - 46px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
     .detail-meet-content {
       width: 686px;
       height: 894px;
+      margin: 60px auto;
       background: #ffffff;
       .detail-meet-up {
         height: 444px;
@@ -151,6 +186,60 @@ export default {
         }
       }
     }
+
+    .detail-meet-light {
+      background-color: #ffffff;
+      width: 686px;
+      height: 124px;
+      margin: 10px auto;
+      border-radius: 10px;
+      display: flex;
+      .detail-meet-light-title {
+        height: 37px;
+        font-size: 38px;
+        line-height: 38px;
+        letter-spacing: 0px;
+        color: #333333;
+      }
+      justify-content: space-around;
+      align-items: center;
+    }
   }
 }
+/*switch start*/
+.switch-component {
+  position: relative;
+  width: 120px;
+  height: 56px;
+  background-color: #dadada;
+  border-radius: 56px;
+  border: none;
+  outline: none;
+  -webkit-appearance: none;
+  transition: all 0.2s ease;
+}
+
+// 按钮
+.switch-component::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+// checked状态时，背景颜色改变
+.switch-component:checked {
+  background-color: #05327b;
+}
+
+// checked状态时，按钮位置改变
+.switch-component:checked::after {
+  left: 50%;
+}
+/*switch end*/
 </style>

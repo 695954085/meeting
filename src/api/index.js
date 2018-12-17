@@ -43,3 +43,11 @@ export const getBookTimeSpace = (bookDate, room) =>
 // 管理员开门码
 export const getAdminCode = () =>
   instance.get(`${config.IP}:${config.PORT}${config.prefix}/admin-code`)
+
+// 会议室灯光控制
+
+export const lightControl = params =>
+  instance.post(
+    `${config.IP}:${config.PORT}${config.prefix}/meeting-room-switchs`,
+    params
+  )

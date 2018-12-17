@@ -77,7 +77,13 @@ export default {
     }
   },
   methods: {
-    eyeOpen () { },
+    eyeOpen () {
+      if (this.loginPasswordType === 'password') {
+        this.loginPasswordType = 'text'
+      } else {
+        this.loginPasswordType = 'password'
+      }
+    },
     async handleRegister () {
       const { error } = Joi.validate({
         usercard: this.usercard,
@@ -88,10 +94,6 @@ export default {
       if (error && error.details.length >= 1) {
         const message = error.details[0].message
         vuxInfo(this, message)
-        return
-      }
-      if (this.password !== this.confirmPassword) {
-        vuxInfo(this, '密码不一致~~')
         return
       }
       let responseValue
@@ -128,7 +130,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "../../styles/variables.less";
-@import "../../styles/mixins.less";
-@import "./register.less";
+@import '../../styles/variables.less';
+@import '../../styles/mixins.less';
+@import './register.less';
 </style>

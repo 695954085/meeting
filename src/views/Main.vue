@@ -68,7 +68,7 @@ export default {
         {
           name: '办公管理',
           path: require('../assets/demo/icon_nav_button.png'),
-          link: '/meeting'
+          link: '/deskbook'
         },
         {
           name: '报销管理',

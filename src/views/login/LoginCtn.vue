@@ -31,7 +31,8 @@
              @click="eyeOpen"></i>
         </div>
       </div>
-      <div><input type="checkbox">
+      <div><input type="checkbox"
+               v-model="isRemember">
         <label>记住密码</label>
         <span>忘记密码？</span>
       </div>
@@ -64,10 +65,11 @@ export default {
   data () {
     return {
       loginMode: 'key',
-      username: '',
+      usercard: '',
       password: '',
       iconEye: 'icon-close-eyes',
-      loginPasswordType: 'password'
+      loginPasswordType: 'password',
+      isRemember: false
     }
   },
   methods: {
@@ -116,7 +118,13 @@ export default {
     toRegister () {
       this.$router.push(`/register`)
     },
-    eyeOpen () { }
+    eyeOpen() {
+      if (this.loginPasswordType === 'password') {
+        this.loginPasswordType = 'text'
+      } else {
+        this.loginPasswordType = 'password'
+      }
+    }
   }
 }
 </script>
