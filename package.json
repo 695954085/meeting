@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "joi": "^14.3.0",
     "postcss-aspect-ratio-mini": "^1.0.1",
     "postcss-cssnext": "^3.1.0",
     "postcss-px-to-viewport": "^0.0.3",
@@ -25,6 +26,8 @@
     "vux": "^2.9.2"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/joi": "^14.0.1",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^8.2.1",
