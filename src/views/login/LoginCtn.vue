@@ -62,10 +62,9 @@ import Joi from 'joi'
 import loginSchema from './login.schema'
 
 export default {
-  data () {
+  data() {
     return {
-      loginMode: 'key',
-      usercard: '',
+      username: '',
       password: '',
       iconEye: 'icon-close-eyes',
       loginPasswordType: 'password',
@@ -73,15 +72,18 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setuser']),
+    ...mapMutations('meeting', ['setuser']),
     /**
      * 登录
      */
-    async handleLogin () {
-      const { error } = Joi.validate({
-        username: this.username,
-        password: this.password
-      }, loginSchema)
+    async handleLogin() {
+      const { error } = Joi.validate(
+        {
+          username: this.username,
+          password: this.password
+        },
+        loginSchema
+      )
       if (error && error.details.length >= 1) {
         const detail = error.details[0]
         const message = detail.message
@@ -113,16 +115,17 @@ export default {
           vuxInfo(this, data.msg)
         }
       }
-      // this.$router.push(`/main`)
     },
-    toRegister () {
+    toRegister() {
       this.$router.push(`/register`)
     },
     eyeOpen() {
       if (this.loginPasswordType === 'password') {
         this.loginPasswordType = 'text'
+        this.iconEye = 'icon-eyes'
       } else {
         this.loginPasswordType = 'password'
+        this.iconEye = 'icon-close-eyes'
       }
     }
   }
@@ -130,7 +133,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "../../styles/variables.less";
-@import "../../styles/mixins.less";
-@import "./login.less";
+@import '../../styles/variables.less';
+@import '../../styles/mixins.less';
+@import './login.less';
 </style>
