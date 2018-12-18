@@ -68,7 +68,7 @@ export default {
   },
   filters: {},
   methods: {
-    ...mapMutations('metting', [
+    ...mapMutations('meeting', [
       'setdetailCount',
       'setmeetingData',
       'setshowData'
@@ -102,7 +102,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('metting', ['meetingData', 'user', 'showData']),
+    ...mapState('meeting', ['meetingData', 'user', 'showData']),
     loadData: function() {
       return this.showData
     }

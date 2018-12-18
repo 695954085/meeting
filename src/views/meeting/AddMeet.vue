@@ -57,7 +57,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('metting', [
+    ...mapMutations('meeting', [
       'setbookLocation',
       'setbookPersonList',
       'setbookTitle',
@@ -150,7 +150,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('metting', [
+    ...mapState('meeting', [
       'bookPersonList',
       'bookTime',
       'currentday',

@@ -78,7 +78,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('metting', ['setbookPersonList']),
+    ...mapMutations('meeting', ['setbookPersonList']),
     certainBookPersonList() {
       this.$router.push(`/addMeet`)
     },
@@ -99,7 +99,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('metting', ['bookPersonList', 'user'])
+    ...mapState('meeting', ['bookPersonList', 'user'])
   }
 }
 </script>

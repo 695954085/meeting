@@ -94,7 +94,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('metting', ['detailCount', 'meetingData', 'showData']),
+    ...mapState('meeting', ['detailCount', 'meetingData', 'showData']),
     detail: function() {
       let detailData = {}
       let timeIndex = this.detailCount.timeIndex
