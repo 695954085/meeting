@@ -16,7 +16,7 @@
       <div aspectratio>
         <div aspectratio-content>
           <input type="text"
-                 placeholder="用户名/Username"
+                 placeholder="工号/EmployeeNo"
                  id="loginUserName"
                  v-model="username">
         </div>
@@ -62,7 +62,7 @@ import Joi from 'joi'
 import loginSchema from './login.schema'
 
 export default {
-  data () {
+  data() {
     return {
       loginMode: 'key',
       usercard: '',
@@ -73,15 +73,18 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setuser']),
+    ...mapMutations('metting', ['setuser']),
     /**
      * 登录
      */
-    async handleLogin () {
-      const { error } = Joi.validate({
-        username: this.username,
-        password: this.password
-      }, loginSchema)
+    async handleLogin() {
+      const { error } = Joi.validate(
+        {
+          username: this.username,
+          password: this.password
+        },
+        loginSchema
+      )
       if (error && error.details.length >= 1) {
         const detail = error.details[0]
         const message = detail.message
@@ -115,7 +118,7 @@ export default {
       }
       // this.$router.push(`/main`)
     },
-    toRegister () {
+    toRegister() {
       this.$router.push(`/register`)
     },
     eyeOpen() {
@@ -130,7 +133,7 @@ export default {
 </script>
 
 <style lang="less">
-@import "../../styles/variables.less";
-@import "../../styles/mixins.less";
-@import "./login.less";
+@import '../../styles/variables.less';
+@import '../../styles/mixins.less';
+@import './login.less';
 </style>

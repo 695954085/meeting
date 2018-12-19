@@ -71,11 +71,11 @@ export default {
       // 提交之前校验一下
       if (this.subject.trim() === '') {
         vuxInfo(this, '请先输入会议主题')
-        return;
+        return
       }
       if (this.bookLocation === 0) {
         vuxInfo(this, '请先选择会议室')
-        return;
+        return
       }
       let comitDay =
         this.currentday.year +
@@ -83,18 +83,27 @@ export default {
         this.currentday.month +
         '/' +
         this.currentday.day
-      let myTime = `${comitDay} ${this.bookTime.startTime}`
+      // 可以提前半个小時
+      let limitTime
+      let timeArr = this.bookTime.startTime.split(':')
+      if (parseInt(timeArr[1]) === 0) {
+        limitTime = timeArr[0] + ':30'
+      } else {
+        let temp = parseInt(timeArr[0]) + 1
+        limitTime = temp + ':00'
+      }
+      let myTime = `${comitDay} ${limitTime}`
       let current = new Date()
       var compareData = new Date(Date.parse(myTime))
       if (compareData < current) {
         vuxInfo(this, '该时间段不合法,选择正确时间段')
-        return;
+        return
       }
 
       let comitPersonList = this.exchangPersonList()
       if (comitPersonList === '请选择') {
         vuxInfo(this, '参会人员不能为空,请选择')
-        return;
+        return
       }
       params.append('subject', this.subject)
       params.append('room', this.bookLocation)

@@ -1,5 +1,5 @@
 <template>
-  <div class="directory">
+  <div class="searchDict">
     <group v-for="(person,index) in dealData"
            :key="index"
            :title="person.letter|toUpperCase">
