@@ -50,7 +50,7 @@ export default {
     Actionsheet,
     Cell
   },
-  data () {
+  data() {
     return {
       show1: false,
       roomMenu: ['会议室1', '会议室2', '会议室3']
@@ -63,10 +63,10 @@ export default {
       'setbookTitle',
       'clearbookTime'
     ]),
-    handleReturn () {
+    handleReturn() {
       this.$router.push(`/meeting`)
     },
-    async handleComplate () {
+    async handleComplate() {
       let params = new URLSearchParams()
       // 提交之前校验一下
       if (this.subject.trim() === '') {
@@ -119,18 +119,19 @@ export default {
         console.log(data.status + data.msg)
         // 成功提交
         if (data.status === 'success') {
-          vuxInfo(this, '恭喜你，预约成功orz~~')
-          this.subject = ''
-          this.setbookLocation(0)
-          this.clearbookTime()
-          this.setbookPersonList([])
-          this.$router.push(`/meeting`)
+          vuxInfo(this, '恭喜你，预约成功orz~~', () => {
+            this.subject = ''
+            this.setbookLocation(0)
+            this.clearbookTime()
+            this.setbookPersonList([])
+            this.$router.push(`/meeting`)
+          })
         } else {
           vuxInfo(this, data.msg)
         }
       }
     },
-    exchangPersonList () {
+    exchangPersonList() {
       let returnValue = '请选择'
       if (this.bookPersonList.length !== 0) {
         returnValue = ''
@@ -141,20 +142,20 @@ export default {
       }
       return returnValue
     },
-    handleSelectRoom () {
+    handleSelectRoom() {
       this.show1 = true
     },
-    handlePickRoom (index) {
+    handlePickRoom(index) {
       this.setbookLocation(index + 1)
     },
-    handleSelectTime () {
+    handleSelectTime() {
       // 没有选择地点直接进入时默认选择第一项
       if (this.bookLocation === 0) {
         this.setbookLocation(1)
       }
       this.$router.push(`/selectTime`)
     },
-    handleSelectPerson () {
+    handleSelectPerson() {
       this.$router.push(`/selectPerson`)
     }
   },
@@ -167,18 +168,18 @@ export default {
       'bookTitle'
     ]),
     subject: {
-      get () {
+      get() {
         return this.bookTitle
       },
-      set (val) {
+      set(val) {
         this.setbookTitle(val)
       }
     },
-    personValue: function () {
+    personValue: function() {
       let returnValue = this.exchangPersonList()
       return returnValue
     },
-    timeValue: function () {
+    timeValue: function() {
       let returnValue = '请选择'
       if (this.bookTime.startTime && this.bookTime.endTime) {
         returnValue =
@@ -193,7 +194,7 @@ export default {
       }
       return returnValue
     },
-    roomValue: function () {
+    roomValue: function() {
       if (this.bookLocation === 0) {
         return '请选择'
       }

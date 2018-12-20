@@ -119,7 +119,9 @@ export default {
         if (data.status === 'fail') {
           vuxInfo(this, data.msg)
         } else {
-          vuxInfo(this, '注册成功，现在去登录吧~~~')
+          vuxInfo(this, data.msg, () => {
+            this.$router.push(`/`)
+          })
         }
       }
     }
