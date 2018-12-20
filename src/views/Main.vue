@@ -4,7 +4,7 @@
     <h3 class="main-kinds-title">办公类</h3>
     <grid :cols="3"
           :show-lr-borders="false">
-      <grid-item v-for="(item,index) in  workData"
+      <grid-item v-for="(item, index) in workData"
                  :key="index"
                  :label="item.name"
                  :link="item.link">
@@ -15,7 +15,7 @@
     <h3 class="main-kinds-title">生活类</h3>
     <grid :cols="3"
           :show-lr-borders="false">
-      <grid-item v-for="(item,index) in  lifeData"
+      <grid-item v-for="(item, index) in lifeData"
                  :key="index"
                  :label="item.name">
         <img slot="icon"
@@ -47,13 +47,12 @@
   </div>
 </template>
 <script>
-import { XHeader, Tabbar, TabbarItem, Grid, GridItem } from 'vux'
+import { Tabbar, TabbarItem, Grid, GridItem } from 'vux'
 export default {
   name: 'Main',
   components: {
     Tabbar,
     TabbarItem,
-    XHeader,
     Grid,
     GridItem
   },

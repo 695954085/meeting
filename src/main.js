@@ -5,7 +5,7 @@ import App from './App'
 import router from './router'
 import VueRouter from 'vue-router'
 import store from './store/store'
-// import VueTouch from 'vue-touch'
+import FastClick from 'fastclick'
 
 import {
   AlertPlugin,
@@ -29,20 +29,13 @@ Vue.component('group', Group)
 Vue.component('x-button', XButton)
 Vue.component('x-header', XHeader)
 
-// Vue.use(VueTouch, {
-//   name: 'v-touch'
-// })
-
-// VueTouch.config.swipe = {
-//   threshold: 100 // 手指左右滑动距离
-// }
-
-// function onBackKeyDown(e) {
-//   // 吃掉返回按钮
-//   // e.preventDefault()
-// }
-
 Vue.config.productionTip = false
+
+if ('addEventListener' in document) {
+  document.addEventListener('DOMContentLoaded', function () {
+    FastClick.attach(document.body)
+  }, false)
+}
 
 /* eslint-disable no-new */
 Vue.use(VueRouter)
@@ -55,20 +48,3 @@ new Vue({
     App
   }
 })
-// document.addEventListener(
-//   'deviceready',
-//   function() {
-//     document.addEventListener('backbutton', onBackKeyDown, false)
-//     new Vue({
-//       el: '#app',
-//       router,
-//       store,
-//       template: '<App/>',
-//       components: {
-//         App
-//       }
-//     })
-//     window.navigator.splashscreen.hide()
-//   },
-//   false
-// )
