@@ -7,8 +7,8 @@ export default {
   setmeetingData: (state, data) => {
     let finishArray = data.filter(character => character.state === '0')
     let unfinishArray = data.filter(character => character.state === '1')
-    Vue.set(state.filterData, 0, handlemeetingData(finishArray))
-    Vue.set(state.filterData, 1, handlemeetingData(unfinishArray))
+    Vue.set(state.filterData, 0, handlemeetingData(unfinishArray))
+    Vue.set(state.filterData, 1, handlemeetingData(finishArray))
   },
   setbookTitle: (state, data) => {
     state.bookTitle = data

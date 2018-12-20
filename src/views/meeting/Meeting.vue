@@ -1,46 +1,54 @@
 <template>
   <div class="meeting">
-    <x-header :left-options="{backText: '首页',preventGoBack:true}"
-              @on-click-back="handleReturn"
-              title="slot:overwrite-title">
-      <div class="overwrite-title"
-           slot="overwrite-title">
+    <x-header
+      :left-options="{backText: '首页', preventGoBack:true}"
+      @on-click-back="handleReturn"
+      title="slot:overwrite-title"
+    >
+      <div class="overwrite-title" slot="overwrite-title">
         <button-tab v-model="tabIndex">
           <button-tab-item>未完成</button-tab-item>
           <button-tab-item>已完成</button-tab-item>
         </button-tab>
       </div>
-      <x-icon slot="right"
-              type="ios-plus-empty"
-              size="35"
-              style="fill:#fff;position:relative;top:-8px;right:-3px;"
-              @click.native="handleAddmeeting"></x-icon>
+      <x-icon
+        slot="right"
+        type="ios-plus-empty"
+        size="35"
+        style="fill:#fff;position:relative;top:-8px;right:-3px;"
+        @click.native="handleAddmeeting"
+      ></x-icon>
     </x-header>
     <div class="meeting-main">
-      <div v-for="(item, index) in meetingData"
-           :key="index"
-           class="item-block">
+      <div v-for="(item, index) in meetingData" :key="index" class="item-block">
         <h3 class="item-block-time">{{ item.day }}</h3>
-        <div v-for="(mItem, mIndex) in item.data"
-             :key="mIndex"
-             class="meeting-blo"
-             @click="toMeetDetail(index, mIndex)">
-          <div class="meeting-blo-left">
-            <Clock :time="mItem.startTime"
-                   :size="clockSize"
-                   :state="mItem.state"></Clock>
-          </div>
-          <div class="meeting-blo-right">
-            <h4 class="meeting-blo-title">{{mItem.subject}}</h4>
-            <div class="meeting-blo-tandl">
-              <span class="meeting-blo-time"><i class="icon iconfont icon-clock"></i>{{mItem.startTime}}-{{mItem.endTime}}</span>
-              <span class="meeting-blo-location"><i class="icon iconfont icon-clock"></i>{{roomMenu[mItem.room-1]}}</span>
+        <swipeout>
+          <swipeout-item v-for="(mItem, mIndex) in item.data" :key="mIndex">
+            <div slot="right-menu">
+              <swipeout-button @click.native="onButtonClick('delete')" type="warn">删除</swipeout-button>
             </div>
-          </div>
-        </div>
+            <div class="meeting-blo" slot="content" @click="toMeetDetail(index, mIndex)">
+              <div class="meeting-blo-left">
+                <Clock :time="mItem.startTime" :size="clockSize" :state="mItem.state"></Clock>
+              </div>
+              <div class="meeting-blo-right">
+                <h4 class="meeting-blo-title">{{mItem.subject}}</h4>
+                <div class="meeting-blo-tandl">
+                  <span class="meeting-blo-time">
+                    <i class="icon iconfont icon-clock"></i>
+                    {{mItem.startTime}}-{{mItem.endTime}}
+                  </span>
+                  <span class="meeting-blo-location">
+                    <i class="icon iconfont icon-clock"></i>
+                    {{roomMenu[mItem.room-1]}}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </swipeout-item>
+        </swipeout>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -79,10 +87,7 @@ export default {
   },
   filters: {},
   methods: {
-    ...mapMutations('meeting', [
-      'setmeetingData',
-      'setshowData'
-    ]),
+    ...mapMutations('meeting', ['setmeetingData', 'setshowData']),
     handleReturn() {
       this.$router.push(`/main`)
     },
