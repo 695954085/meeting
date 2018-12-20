@@ -52,6 +52,7 @@ export default {
       this.$router.push(`/addDesk`)
     },
     handleClick: function() {
+      // eslint-disable-next-line
       cordova.plugins.barcodeScanner.scan(
         function(result) {
           alert(
