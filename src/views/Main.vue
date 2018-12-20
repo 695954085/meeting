@@ -71,32 +71,32 @@ export default {
       workData: [
         {
           name: '会议管理',
-          path: require('../assets/demo/icon_nav_button.png'),
+          path: require('../assets/images/icon-1.png'),
           link: '/meeting'
         },
         {
           name: '办公管理',
-          path: require('../assets/demo/icon_nav_button.png'),
+          path: require('../assets/images/icon-2.png'),
           link: '/deskBook'
         },
         {
           name: '报销管理',
-          path: require('../assets/demo/icon_nav_button.png'),
+          path: require('../assets/images/icon-3.png'),
           link: '/meeting'
         }
       ],
       lifeData: [
-        { name: '请假', path: require('../assets/demo/icon_nav_button.png') },
-        { name: '项目', path: require('../assets/demo/icon_nav_button.png') },
-        { name: '合同', path: require('../assets/demo/icon_nav_button.png') },
-        { name: '出差', path: require('../assets/demo/icon_nav_button.png') },
+        { name: '请假', path: require('../assets/images/icon-4.png') },
+        { name: '项目', path: require('../assets/images/icon-5.png') },
+        { name: '合同', path: require('../assets/images/icon-6.png') },
+        { name: '出差', path: require('../assets/images/icon-7.png') },
         {
           name: '外出登记',
-          path: require('../assets/demo/icon_nav_button.png')
+          path: require('../assets/images/icon-8.png')
         },
         {
           name: '宿舍入住',
-          path: require('../assets/demo/icon_nav_button.png')
+          path: require('../assets/images/icon-9.png')
         }
       ]
     }

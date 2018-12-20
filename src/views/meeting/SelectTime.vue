@@ -42,6 +42,7 @@
                 class="select-time-inner"
                 :class="{
                   unable: !item.isAble,
+                  halfable: item.isHalfAble,
                   select: item.isSelect }"
                 @click="handleSelectTime(item.text)">{{item.text}}
           </span>
@@ -64,7 +65,7 @@ export default {
   components: {
     Actionsheet
   },
-  data () {
+  data() {
     return {
       showRoom: false,
       roomMenu: ['会议室1', '会议室2', '会议室3'],
@@ -81,27 +82,37 @@ export default {
       'setbookTime',
       'setbookLocation'
     ]),
-    handleSelectRoom () {
+    handleSelectRoom() {
       this.showRoom = true
     },
-    handleSelectTime (value) {
+    handleSelectTime(value) {
       let tempBool = false
-      let a = this.dayTime.find(this.hasTimeText(value))
-      let b = this.dayTime.filter(this.hasTimeAble(false))
-      if (a.isAble) {
+      // currentTime是当前点击块的状态值
+      let currentTime = this.dayTime.find(this.hasTimeText(value))
+      // unableArr是所有不可用的数组
+      let unableArr = this.dayTime.filter(this.hasTimeAble(false))
+      if (currentTime.isAble) {
         if (this.bookTime.startTime && !this.bookTime.endTime) {
+          let haha = this.dayTime.find(
+            this.hasTimeText(this.bookTime.startTime)
+          )
           let selectspace = Time.getTimeSpace({
             startTime: this.bookTime.startTime,
             endTime: value
           })
           for (let i = 0; i < selectspace.length; i++) {
-            let c = b.some(this.hasTimeText(selectspace[i]))
-            if (c) {
+            if (unableArr.some(this.hasTimeText(selectspace[i]))) {
+              tempBool = true
+              break
+            }
+            if (haha.isHalfAble && currentTime.isHalfAble) {
+              // halfAble头尾时不可选
               tempBool = true
               break
             }
           }
           if (!tempBool) {
+            // 不可选的数据数组里不和选择的时间段重叠时才设置结束时间
             this.setbookTime({ endTime: value })
           }
         } else {
@@ -109,22 +120,22 @@ export default {
         }
       }
     },
-    certainBookTime () {
+    certainBookTime() {
       this.$router.push(`/addMeet`)
     },
-    hasTimeText (text) {
+    hasTimeText(text) {
       return character => character.text === text
     },
-    hasTimeAble (isAble) {
+    hasTimeAble(isAble) {
       return character => character.isAble === false
     },
-    selectRoom (index) {
+    selectRoom(index) {
       this.setbookLocation(index + 1)
       // 更改房间之后也得重新查一次更新数据
       this.queryState()
     },
     // 请求对应日期房间数据
-    async queryState () {
+    async queryState() {
       // 请求数据状态
       let comitDate = `${this.currentday.year}/${this.currentday.month}/${
         this.currentday.day
@@ -140,16 +151,16 @@ export default {
       // let a = [{ startTime: '13:00', endTime: '15:30' }]
       // this.setdayTime(a)
     },
-    async handleSelectDay (index) {
+    async handleSelectDay(index) {
       // 设置选中日期
       this.selectWeek(index)
       this.queryState()
     },
-    setTodayData (value) {
+    setTodayData(value) {
       this.setdayTime(value)
     }
   },
-  async mounted () {
+  async mounted() {
     this.queryState()
     // this.setTodayData(this.mockTime)
   },
@@ -161,20 +172,20 @@ export default {
       'currentday',
       'bookLocation'
     ]),
-    roomName: function () {
+    roomName: function() {
       return this.roomMenu[this.bookLocation - 1]
     },
-    weekDetail: function () {
+    weekDetail: function() {
       return this.weekData
     },
-    timeSlot: function () {
+    timeSlot: function() {
       let cutSlot = []
       for (let i = 0; i < this.dayTime.length; i += 4) {
         cutSlot.push(this.dayTime.slice(i, i + 4))
       }
       return cutSlot
     },
-    getCurrentDay: function () {
+    getCurrentDay: function() {
       let monthValue = this.currentday.month + '月'
       let dayValue = this.currentday.day + '日'
       let weekValue = '周' + this.currentday.week
@@ -183,7 +194,7 @@ export default {
     }
   },
   filters: {
-    judgeIsToday: function (value) {
+    judgeIsToday: function(value) {
       let today = new Date()
       if (value === today.getDate()) {
         return '今'
@@ -275,12 +286,6 @@ export default {
         span:nth-child(4n + 0) {
           border-radius: 0 40px 40px 0;
         }
-        // span.select:first-child {
-        //   background-color: #00aeff;
-        // }
-        // span.select:last-child {
-        //   background-color: #00aeff;
-        // }
         .select-time-inner {
           font-family: PingFangSC-Medium;
           font-size: 26px;
@@ -296,9 +301,12 @@ export default {
         .select-time-inner.unable {
           background-color: #bbbbbb;
         }
+        .select-time-inner.halfable {
+          background-color: rgba(54, 107, 253, 0.2);
+        }
         .select-time-inner.select {
-          // background-color: #bae9ff;
           background-color: #1978fe;
+          color: #ffffff;
         }
       }
     }

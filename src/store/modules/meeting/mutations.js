@@ -47,6 +47,23 @@ export default {
         }
       }
     })
+    // 再对dayTime过滤一次,连在一起的isHalfAble状态为true的重置回false
+    for (let i = 0; i < state.dayTime.length - 1; i++) {
+      if (!state.dayTime[i].isAble && !state.dayTime[i + 1].isAble) {
+        if (state.dayTime[i - 1].isHalfAble || !state.dayTime[i - 1].isAble) {
+          // 下一个兄弟是unabled,上一个兄弟是头的时候
+          continue
+        } else {
+          state.dayTime[i].isHalfAble = true
+          state.dayTime[i].isAble = true
+        }
+      }
+      if (!state.dayTime[i].isAble && state.dayTime[i + 1].isAble) {
+        // 下一个兄弟是able的时候
+        state.dayTime[i].isHalfAble = true
+        state.dayTime[i].isAble = true
+      }
+    }
   },
 
   setbookTime: (state, data) => {

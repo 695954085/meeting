@@ -37,6 +37,8 @@
 import Calendar from '@/components/Calendar'
 import { Actionsheet, Cell } from 'vux'
 import { mapMutations, mapState } from 'vuex'
+import { vuxInfo } from '@/utils/alert.js'
+import { bookStaion } from '@/api/'
 export default {
   name: 'AddDesk',
   components: {
@@ -62,6 +64,16 @@ export default {
       // 清除日历选中状态
       this.setdeskBookDate([])
     },
+    getStationValue() {
+      let selectOne = this.deskBookSeatData.find(
+        character => character.isActive === true
+      )
+      if (selectOne === undefined || Object.keys(selectOne).length === 0) {
+        return ''
+      }
+      let index = this.deskBookSeatData.indexOf(selectOne) + 1
+      return index.toString()
+    },
     certainTime() {
       this.showCalendar = false
       this.setdeskBookDateCertain(true)
@@ -75,33 +87,59 @@ export default {
       //   this.timeValue = `${startYear}.${startMonth}.${startDay}-${endYear}.${endMonth}.${endDay}`
       // }
     },
-    handleComplate() {
-      console.log('apple')
+    async handleComplate() {
+      let responseValue
+      try {
+        let startYear = this.deskBookDate[0].day.getFullYear()
+        let startMonth = this.deskBookDate[0].day.getMonth() + 1
+        let startDay = this.deskBookDate[0].day.getDate()
+        let endYear = this.deskBookDate[1].day.getFullYear()
+        let endMonth = this.deskBookDate[1].day.getMonth() + 1
+        let endDay = this.deskBookDate[1].day.getDate()
+        let station = this.getStationValue()
+        const params = new URLSearchParams()
+        params.append('usercard', this.user.usercard)
+        params.append('station', station)
+        params.append('startTime', `${startYear}/${startMonth}/${startDay}`)
+        params.append('endTime', `${endYear}/${endMonth}/${endDay}`)
+        responseValue = await bookStaion(params)
+      } catch (err) {
+        vuxInfo(this, err)
+        return
+      }
+      const { status, data } = responseValue
+      if (status !== 200) {
+        vuxInfo(this, '服务器异常')
+      } else {
+        if (data.status === 'success') {
+          console.log(data.msg)
+          console.log(data.data)
+          this.$router.push(`/deskBook`)
+        } else {
+          vuxInfo(this, data.msg)
+        }
+      }
       // this.$router.push(`/deskBook`)
     },
     backToDesk() {
       this.$router.push(`/deskBook`)
+      // 清除预定的记录
     }
   },
   computed: {
+    ...mapState('metting', ['user']),
     ...mapState('workarea', [
       'deskBookDate',
       'deskBookSeatData',
       'deskBookDateCertain'
     ]),
     deskValue: function() {
-      let selectOne = this.deskBookSeatData.find(
-        character => character.isActive === true
-      )
-      if (selectOne === undefined || Object.keys(selectOne).length === 0) {
-        return ''
-      }
-      let index = this.deskBookSeatData.indexOf(selectOne) + 1
-      return index.toString()
+      return this.getStationValue()
     },
     timeValue: function() {
       if (this.deskBookDateCertain) {
         if (this.deskBookDate.length === 2) {
+          // 后需考虑抽成getters
           let startYear = this.deskBookDate[0].day.getFullYear()
           let startMonth = this.deskBookDate[0].day.getMonth() + 1
           let startDay = this.deskBookDate[0].day.getDate()

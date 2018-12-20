@@ -267,10 +267,6 @@ export default {
     }
   }
 
-  .days li .active {
-    // color: #00aaff;
-  }
-
   .days li .other-month {
     padding: 5px;
     color: gainsboro;

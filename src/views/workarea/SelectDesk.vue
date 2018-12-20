@@ -6,13 +6,17 @@
          @click="handleComplate">确定</a>
     </x-header>
     <div class="selectDesk-main">
-      <div class="selectDesk-seat-main">
-        <div class="selectDesk-seat-item"
-             v-for="(item,index) in deskBookSeatData"
-             :key="index"
-             @click="handleSelect(index)"
-             :class="{isActive: item.isActive,
-             isAble: !item.isAble}">{{item.name}}</div>
+      <div class="desk-image-wrap">
+        <img src="../../assets/images/desk-map.png"
+             alt="">
+        <div class="selectDesk-seat-main">
+          <div class="selectDesk-seat-item"
+               v-for="(item,index) in deskBookSeatData"
+               :key="index"
+               @click="handleSelect(index)"
+               :class="{isActive: item.isActive,
+             isAble: !item.isAble}"><span>{{item.name}}</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -54,18 +58,41 @@ export default {
   .selectDesk-main {
     width: 100%;
     height: calc(100% - 46px);
-    .selectDesk-seat-main {
-      width: 100%;
-      display: flex;
-      .selectDesk-seat-item {
-        height: 40px;
-        line-height: 40px;
-        width: 20%;
-        &.isActive {
-          background-color: #ffaabb;
-        }
-        &.isAble {
-          background-color: #cccccc;
+    background-color: #ffaabb;
+    display: flex;
+    align-items: center;
+    .desk-image-wrap {
+      position: relative;
+      img {
+        width: 750px;
+        height: 1215px;
+      }
+      .selectDesk-seat-main {
+        position: absolute;
+        right: 65px;
+        top: 1000px;
+        height: 0;
+        display: flex;
+        .selectDesk-seat-item {
+          height: 148px;
+          line-height: 40px;
+          width: 97px;
+          background: url('../../assets/images/empty-desk.png') no-repeat;
+          display: flex;
+          align-items: flex-end;
+          justify-content: center;
+          span {
+            font-family: PingFangSC-Regular;
+            font-size: 30px;
+            font-weight: normal;
+            color: #333333;
+          }
+          &.isActive {
+            background: url('../../assets/images/select-desk.png') no-repeat;
+          }
+          &.isAble {
+            background: url('../../assets/images/unable-desk.png') no-repeat;
+          }
         }
       }
     }

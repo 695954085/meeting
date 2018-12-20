@@ -119,13 +119,7 @@ export default {
         if (data.status === 'fail') {
           vuxInfo(this, data.msg)
         } else {
-          this.$vux.alert.show({
-            title: '提示',
-            content: '注册成功，现在去登录吧~~~',
-            onHide: () => {
-              this.$router.push(`/`)
-            }
-          })
+          vuxInfo(this, '注册成功，现在去登录吧~~~')
         }
       }
     }

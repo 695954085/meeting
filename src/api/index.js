@@ -51,3 +51,26 @@ export const lightControl = params =>
     `${config.IP}:${config.PORT}${config.prefix}/meeting-room-switchs`,
     params
   )
+// 工位预约
+
+export const bookStaion = params =>
+  instance.post(
+    `${config.IP}:${config.PORT}${config.prefix}/bookStation`,
+    params
+  )
+
+// 根据员工工号查询预约工位列表
+export const getDeskList = usercard =>
+  instance.get(
+    `${config.IP}:${config.PORT}${
+      config.prefix
+    }/appointmentStation-list/${usercard}`
+  )
+
+// 根据开始日期和结束日期获取被占用中的工位列表
+export const getDeskState = (startTime, endTime) =>
+  instance.get(
+    `${config.IP}:${config.PORT}${
+      config.prefix
+    }/station-busy-list/?startTime=${startTime}&endTime=${endTime}`
+  )
