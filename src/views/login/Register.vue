@@ -66,7 +66,7 @@ import Joi from 'joi'
 
 export default {
   name: 'Register',
-  data () {
+  data() {
     return {
       usercard: '',
       username: '',
@@ -77,20 +77,25 @@ export default {
     }
   },
   methods: {
-    eyeOpen () {
+    eyeOpen() {
       if (this.loginPasswordType === 'password') {
         this.loginPasswordType = 'text'
+        this.iconEye = 'icon-eyes'
       } else {
         this.loginPasswordType = 'password'
+        this.iconEye = 'icon-close-eyes'
       }
     },
-    async handleRegister () {
-      const { error } = Joi.validate({
-        usercard: this.usercard,
-        password: this.password,
-        confirmPassword: this.confirmPassword,
-        username: this.username
-      }, registerSchema)
+    async handleRegister() {
+      const { error } = Joi.validate(
+        {
+          usercard: this.usercard,
+          password: this.password,
+          confirmPassword: this.confirmPassword,
+          username: this.username
+        },
+        registerSchema
+      )
       if (error && error.details.length >= 1) {
         const message = error.details[0].message
         vuxInfo(this, message)
@@ -114,11 +119,10 @@ export default {
         if (data.status === 'fail') {
           vuxInfo(this, data.msg)
         } else {
-          // vuxInfo(this, '注册成功，现在去登录吧~~~')
-          this.$vux.alert({
+          this.$vux.alert.show({
             title: '提示',
             content: '注册成功，现在去登录吧~~~',
-            onHide () {
+            onHide: () => {
               this.$router.push(`/`)
             }
           })

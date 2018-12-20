@@ -1,4 +1,5 @@
 import Time from '@/utils/time.js'
+import Vue from 'vue'
 export default {
   setuser: (state, data) => {
     state.user = data
@@ -6,21 +7,8 @@ export default {
   setmeetingData: (state, data) => {
     let finishArray = data.filter(character => character.state === '0')
     let unfinishArray = data.filter(character => character.state === '1')
-    state.filterData[0] = handlemeetingData(finishArray)
-    state.filterData[1] = handlemeetingData(unfinishArray)
-    state.meetingData = handlemeetingData(data)
-    // 默认数据是未完成的
-    state.showData = state.filterData[1]
-  },
-  setshowData: (state, data) => {
-    if (data === 1) {
-      state.showData = state.filterData[0]
-    } else {
-      state.showData = state.filterData[1]
-    }
-  },
-  setdetailCount: (state, data) => {
-    state.detailCount = data
+    Vue.set(state.filterData, 0, handlemeetingData(finishArray))
+    Vue.set(state.filterData, 1, handlemeetingData(unfinishArray))
   },
   setbookTitle: (state, data) => {
     state.bookTitle = data

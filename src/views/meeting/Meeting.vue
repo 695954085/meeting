@@ -6,8 +6,8 @@
       <div class="overwrite-title"
            slot="overwrite-title">
         <button-tab v-model="tabIndex">
-          <button-tab-item @on-item-click="handleTab()">未完成</button-tab-item>
-          <button-tab-item @on-item-click="handleTab()">已完成</button-tab-item>
+          <button-tab-item>未完成</button-tab-item>
+          <button-tab-item>已完成</button-tab-item>
         </button-tab>
       </div>
       <x-icon slot="right"
@@ -17,14 +17,14 @@
               @click.native="handleAddmeeting"></x-icon>
     </x-header>
     <div class="meeting-main">
-      <div v-for="(item,index) in loadData"
+      <div v-for="(item, index) in meetingData"
            :key="index"
            class="item-block">
-        <h3 class="item-block-time">{{item.day}}</h3>
-        <div v-for="(mItem,mIndex) in item.data"
+        <h3 class="item-block-time">{{ item.day }}</h3>
+        <div v-for="(mItem, mIndex) in item.data"
              :key="mIndex"
              class="meeting-blo"
-             @click="toMeetDetail(index,mIndex)">
+             @click="toMeetDetail(index, mIndex)">
           <div class="meeting-blo-left">
             <Clock :time="mItem.startTime"
                    :size="clockSize"
@@ -45,8 +45,16 @@
 </template>
 
 <script>
-import { XHeader, Cell, ButtonTab, ButtonTabItem } from 'vux'
-import { mapMutations, mapState } from 'vuex'
+import {
+  XHeader,
+  Cell,
+  ButtonTab,
+  ButtonTabItem,
+  Swipeout,
+  SwipeoutItem,
+  SwipeoutButton
+} from 'vux'
+import { mapMutations, mapState, mapGetters } from 'vuex'
 import Clock from '@/components/Clock'
 import { getMeeting } from '@/api/'
 import { vuxInfo } from '@/utils/alert.js'
@@ -57,7 +65,10 @@ export default {
     Cell,
     ButtonTab,
     ButtonTabItem,
-    Clock
+    Clock,
+    Swipeout,
+    SwipeoutItem,
+    SwipeoutButton
   },
   data() {
     return {
@@ -68,8 +79,7 @@ export default {
   },
   filters: {},
   methods: {
-    ...mapMutations('metting', [
-      'setdetailCount',
+    ...mapMutations('meeting', [
       'setmeetingData',
       'setshowData'
     ]),
@@ -80,11 +90,14 @@ export default {
       this.$router.push(`/addMeet`)
     },
     toMeetDetail(fIndex, cIndex) {
-      this.setdetailCount({
-        timeIndex: fIndex,
-        dataIndex: cIndex
+      this.$router.push({
+        path: '/detailMeet',
+        query: {
+          tabIndex: this.tabIndex,
+          fIndex,
+          cIndex
+        }
       })
-      this.$router.push(`/detailMeet`)
     },
     async queryMeetingData() {
       let responseValue = await getMeeting(this.user.usercard)
@@ -95,16 +108,13 @@ export default {
       } else {
         this.setmeetingData(data)
       }
-    },
-    handleTab() {
-      console.log('tabIndex', this.tabIndex)
-      this.setshowData(this.tabIndex)
     }
   },
   computed: {
-    ...mapState('metting', ['meetingData', 'user', 'showData']),
-    loadData: function() {
-      return this.showData
+    ...mapGetters('meeting', ['showData']),
+    ...mapState('meeting', ['user']),
+    meetingData() {
+      return this.showData(this.tabIndex)
     }
   },
   async mounted() {

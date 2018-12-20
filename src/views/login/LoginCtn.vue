@@ -64,8 +64,7 @@ import loginSchema from './login.schema'
 export default {
   data() {
     return {
-      loginMode: 'key',
-      usercard: '',
+      username: '',
       password: '',
       iconEye: 'icon-close-eyes',
       loginPasswordType: 'password',
@@ -73,7 +72,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('metting', ['setuser']),
+    ...mapMutations('meeting', ['setuser']),
     /**
      * 登录
      */
@@ -116,7 +115,6 @@ export default {
           vuxInfo(this, data.msg)
         }
       }
-      // this.$router.push(`/main`)
     },
     toRegister() {
       this.$router.push(`/register`)
@@ -124,8 +122,10 @@ export default {
     eyeOpen() {
       if (this.loginPasswordType === 'password') {
         this.loginPasswordType = 'text'
+        this.iconEye = 'icon-eyes'
       } else {
         this.loginPasswordType = 'password'
+        this.iconEye = 'icon-close-eyes'
       }
     }
   }

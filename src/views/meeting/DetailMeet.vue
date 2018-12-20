@@ -23,8 +23,6 @@
               <div class="detail-meet-personList">
                 <i class="icon iconfont icon-man"></i>
                 <span>{{detail.participants}}</span>
-                <!-- <span v-for="(item,index) in detail.paticipants|exchange"
-                      :key="index">{{item}},</span> -->
               </div>
             </div>
             <Clock :time="detail.startTime"
@@ -46,7 +44,7 @@
 <script>
 import { Qrcode } from 'vux'
 import Clock from '@/components/Clock'
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import { lightControl } from '@/api/'
 export default {
   name: 'DetailMeet',
@@ -59,7 +57,9 @@ export default {
       clockSize: '96px',
       roomMenu: ['会议室1', '会议室2', '会议室3'],
       lightState: false,
-      isUseful: true
+      isUseful: !!this.$route.query.tabIndex,
+      timeIndex: this.$route.query.cIndex,
+      dataIndex: this.$route.query.fIndex
     }
   },
   filters: {
@@ -67,40 +67,32 @@ export default {
       return value.split(',')
     }
   },
-  mounted() {
-    let timeIndex = this.detailCount.timeIndex
-    let dataIndex = this.detailCount.dataIndex
-    let comitDay = this.showData[timeIndex].day
-    let startTime = this.showData[timeIndex].data[dataIndex].startTime
-    let endTime = this.showData[timeIndex].data[dataIndex].endTime
-    let myStartTime = `${comitDay} ${startTime}`
-    let myEndTime = `${comitDay} ${endTime}`
-    let current = new Date()
-    var compareS = new Date(Date.parse(myStartTime))
-    var compareL = new Date(Date.parse(myEndTime))
-    if (current <= compareL && current >= compareS) {
-      this.isUseful = false
-    }
-  },
   methods: {
     async handleLight() {
-      let timeIndex = this.detailCount.timeIndex
-      let dataIndex = this.detailCount.dataIndex
       let params = new URLSearchParams()
-      params.append('room', this.showData[timeIndex].data[dataIndex].room)
+      params.append(
+        'room',
+        this.showData[this.timeIndex].data[this.dataIndex].room
+      )
       params.append('method', this.lightState ? 'Open' : 'Close')
       let responseValue = await lightControl(params)
       console.log(responseValue)
     }
   },
   computed: {
-    ...mapState('metting', ['detailCount', 'meetingData', 'showData']),
-    detail: function() {
+    ...mapGetters('meeting', {
+      meetingData: 'showData'
+    }),
+    showData() {
+      return this.meetingData(this.$route.query.tabIndex)
+    },
+    detail() {
       let detailData = {}
-      let timeIndex = this.detailCount.timeIndex
-      let dataIndex = this.detailCount.dataIndex
-      detailData.day = this.showData[timeIndex].day
-      Object.assign(detailData, this.showData[timeIndex].data[dataIndex])
+      detailData.day = this.showData[this.timeIndex].day
+      Object.assign(
+        detailData,
+        this.showData[this.timeIndex].data[this.dataIndex]
+      )
       return detailData
     }
   }

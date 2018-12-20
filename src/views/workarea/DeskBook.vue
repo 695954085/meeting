@@ -17,11 +17,11 @@
     </div>
   </div>
 </template>
+
 <script>
 import { XHeader, ButtonTab, ButtonTabItem } from 'vux'
 import DeskList from '@/components/DeskList'
 import RoomMap from '@/components/RoomMap'
-import { mapMutations, mapState } from 'vuex'
 export default {
   name: 'DeskBook',
   components: {

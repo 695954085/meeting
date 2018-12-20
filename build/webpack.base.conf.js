@@ -98,5 +98,8 @@ module.exports = vuxLoader.merge(webpackConfig, {
   }, {
     name: 'less-theme',
     path: 'src/styles/theme.less' // 相对项目根目录路径
+  },{
+    // 在构建后去除重复css代码
+    name: 'duplicate-style'
   }]
 })

@@ -29,7 +29,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('metting', ['setbookPersonList']),
+    ...mapMutations('meeting', ['setbookPersonList']),
     change(val, label) {
       // if (val.length !== 0) {
       //   console.log(this.personList)
@@ -38,7 +38,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('metting', ['bookPersonList']),
+    ...mapState('meeting', ['bookPersonList']),
     dealData: function() {
       let data = Pingyin.pySegSort(this.personData)
       return data

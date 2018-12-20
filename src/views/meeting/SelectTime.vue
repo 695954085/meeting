@@ -75,7 +75,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('metting', [
+    ...mapMutations('meeting', [
       'selectWeek',
       'setdayTime',
       'setbookTime',
@@ -154,7 +154,7 @@ export default {
     // this.setTodayData(this.mockTime)
   },
   computed: {
-    ...mapState('metting', [
+    ...mapState('meeting', [
       'weekData',
       'dayTime',
       'bookTime',
