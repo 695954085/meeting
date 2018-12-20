@@ -72,7 +72,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('metting', ['setuser']),
+    ...mapMutations('meeting', ['setuser']),
     /**
      * 登录
      */

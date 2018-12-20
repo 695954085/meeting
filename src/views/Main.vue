@@ -53,7 +53,7 @@
   </div>
 </template>
 <script>
-import { XHeader, Tabbar, TabbarItem, Grid, GridItem, Actionsheet } from 'vux'
+import { Tabbar, TabbarItem, Grid, GridItem, Actionsheet } from 'vux'
 import { mapMutations } from 'vuex'
 export default {
   name: 'Main',
@@ -102,7 +102,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('metting', ['setuser']),
+    ...mapMutations('meeting', ['setuser']),
     quitLogin(index) {
       if (index === 0) {
         // 路由置回登陆界面，清除vuex
