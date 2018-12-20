@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import meeting from './modules/meeting/'
+import metting from './modules/meeting/'
+import workarea from './modules/workarea/'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   modules: {
-    meeting
+    metting,
+    workarea
   }
 })
 

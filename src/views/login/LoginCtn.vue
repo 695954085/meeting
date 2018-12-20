@@ -16,7 +16,7 @@
       <div aspectratio>
         <div aspectratio-content>
           <input type="text"
-                 placeholder="用户名/Username"
+                 placeholder="工号/EmployeeNo"
                  id="loginUserName"
                  v-model="username">
         </div>
@@ -72,7 +72,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('meeting', ['setuser']),
+    ...mapMutations('metting', ['setuser']),
     /**
      * 登录
      */

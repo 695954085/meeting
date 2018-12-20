@@ -1,5 +1,5 @@
 <template>
-  <div class="directory">
+  <div class="searchDict">
     <group v-for="(person,index) in dealData"
            :key="index"
            :title="person.letter|toUpperCase">
@@ -29,11 +29,11 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('meeting', ['setbookPersonList']),
+    ...mapMutations('metting', ['setbookPersonList']),
     change(val, label) {}
   },
   computed: {
-    ...mapState('meeting', ['bookPersonList']),
+    ...mapState('metting', ['bookPersonList']),
     dealData: function() {
       let data = Pingyin.pySegSort(this.personData)
       return data

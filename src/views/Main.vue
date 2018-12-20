@@ -1,6 +1,8 @@
 <template>
   <div class="main">
-    <x-header :left-options="{showBack: false}">首页</x-header>
+    <x-header :left-options="{showBack: false}"
+              :right-options="{showMore: true}"
+              @on-click-more="showMenus = true">首页</x-header>
     <h3 class="main-kinds-title">办公类</h3>
     <grid :cols="3"
           :show-lr-borders="false">
@@ -44,20 +46,28 @@
         <span slot="label">我的</span>
       </tabbar-item>
     </tabbar>
+    <actionsheet :menus="menus"
+                 v-model="showMenus"
+                 show-cancel
+                 @on-click-menu="quitLogin"></actionsheet>
   </div>
 </template>
 <script>
-import { Tabbar, TabbarItem, Grid, GridItem } from 'vux'
+import { XHeader, Tabbar, TabbarItem, Grid, GridItem, Actionsheet } from 'vux'
+import { mapMutations } from 'vuex'
 export default {
   name: 'Main',
   components: {
     Tabbar,
     TabbarItem,
     Grid,
-    GridItem
+    GridItem,
+    Actionsheet
   },
   data() {
     return {
+      menus: ['退出登录'],
+      showMenus: false,
       workData: [
         {
           name: '会议管理',
@@ -67,7 +77,7 @@ export default {
         {
           name: '办公管理',
           path: require('../assets/demo/icon_nav_button.png'),
-          link: '/deskbook'
+          link: '/deskBook'
         },
         {
           name: '报销管理',
@@ -91,8 +101,20 @@ export default {
       ]
     }
   },
-  methods: {},
-  filters: {}
+  methods: {
+    ...mapMutations('metting', ['setuser']),
+    quitLogin(index) {
+      if (index === 0) {
+        // 路由置回登陆界面，清除vuex
+        let user = {
+          usercard: '',
+          username: ''
+        }
+        this.setuser(user)
+        this.$router.push(`/`)
+      }
+    }
+  }
 }
 </script>
 <style lang="less">

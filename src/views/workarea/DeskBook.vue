@@ -1,51 +1,64 @@
 <template>
-  <!-- <todo-list>
-    <template slot-scope="slotProps">
-      <span v-if="slotProps.todo.isComplete">✓</span>
-      {{ slotProps.todo.text }}
-    </template>
-  </todo-list> -->
-  <group>
-    <datetime title='使用日期'></datetime>
-    <datetime1 title='使用日期'></datetime1>
-  </group>
-  <!-- <group>
-    <picker :data='years'
-            v-model='year1'></picker>
-  </group> -->
+  <div class="deskBook">
+    <x-header :left-options="{backText: '',preventGoBack:true}"
+              @on-click-back="handleReturn"
+              title="slot:overwrite-title">
+      <div class="overwrite-title"
+           slot="overwrite-title">
+        <button-tab v-model="tabIndex">
+          <button-tab-item @on-item-click="handleTab()">室内地图</button-tab-item>
+          <button-tab-item @on-item-click="handleTab()">工位预约</button-tab-item>
+        </button-tab>
+      </div>
+    </x-header>
+    <div class="deskBook-main">
+      <RoomMap v-show="tabIndex=== 0"></RoomMap>
+      <DeskList v-show="tabIndex === 1"></DeskList>
+    </div>
+  </div>
 </template>
 
 <script>
-// import todoList from './todolist'
-import { Datetime } from 'vux'
-import Datetime1 from '@/components/datetime/Datetime'
-import DatePicker from '@/components/datetime/DatePicker'
-// import { Picker } from 'vux'
-
+import { XHeader, ButtonTab, ButtonTabItem } from 'vux'
+import DeskList from '@/components/DeskList'
+import RoomMap from '@/components/RoomMap'
+import { mapMutations, mapState } from 'vuex'
 export default {
   name: 'DeskBook',
   components: {
-    // todoList,
-    Datetime,
-    Datetime1,
-    DatePicker
-  },
-  computed: {
-    years() {
-      let years = []
-      for (var i = 2000; i <= 2030; i++) {
-        years.push({
-          name: i + '年',
-          value: i + ''
-        })
-      }
-      return [years]
-    }
+    XHeader,
+    ButtonTab,
+    ButtonTabItem,
+    RoomMap,
+    DeskList
   },
   data() {
     return {
-      year1: ['']
+      tabIndex: 0
     }
+  },
+  methods: {
+    handleReturn() {
+      this.$router.push(`/main`)
+    },
+    handleTab() {}
   }
 }
 </script>
+<style lang="less" scoped>
+.deskBook {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  .vux-header-title-area {
+    .overwrite-title {
+      width: 80%;
+      margin: 5px 10%;
+    }
+  }
+  .deskBook-main {
+    background-color: #e9e9e9;
+    height: calc(100% - 46px);
+  }
+}
+</style>

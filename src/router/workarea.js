@@ -1,7 +1,21 @@
 import DeskBook from '@/views/workarea/DeskBook'
+import AddDesk from '@/views/workarea/AddDesk'
+import SelectDesk from '@/views/workarea/SelectDesk'
 
-export default [{
-  path: '/deskbook',
-  name: 'DeskBook',
-  component: DeskBook
-}]
+export default [
+  {
+    path: '/deskBook',
+    name: 'DeskBook',
+    component: DeskBook
+  },
+  {
+    path: '/addDesk',
+    name: 'AddDesk',
+    component: AddDesk
+  },
+  {
+    path: '/selectDesk',
+    name: 'SelectDesk',
+    component: SelectDesk
+  }
+]

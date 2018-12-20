@@ -83,7 +83,16 @@ export default {
         this.currentday.month +
         '/' +
         this.currentday.day
-      let myTime = `${comitDay} ${this.bookTime.startTime}`
+      // 可以提前半个小時
+      let limitTime
+      let timeArr = this.bookTime.startTime.split(':')
+      if (parseInt(timeArr[1]) === 0) {
+        limitTime = timeArr[0] + ':30'
+      } else {
+        let temp = parseInt(timeArr[0]) + 1
+        limitTime = temp + ':00'
+      }
+      let myTime = `${comitDay} ${limitTime}`
       let current = new Date()
       var compareData = new Date(Date.parse(myTime))
       if (compareData < current) {
