@@ -3,12 +3,10 @@
     <x-header :left-options="{backText: ''}">注册</x-header>
     <div class="login-ctn">
       <div class="login-info-ctn">
-        <div class="login-title-img"
+        <div class="login-title-logo"
              aspectratio>
           <div aspectratio-content>
-            <img src="../../assets/demo/1.jpg"
-                 alt=""
-                 class="login-title-img_content">
+              <i class="iconfont icon-logo"></i>
           </div>
         </div>
         <div class="register-usercard"

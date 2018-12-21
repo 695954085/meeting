@@ -58,12 +58,7 @@ export default {
     return {
       clockSize: '96px',
       roomMenu: ['会议室1', '会议室2', '会议室3'],
-<<<<<<< df224a72b40b63329cd0978762d3050ac65950c4
-      lightState: false,
-=======
       lightState: true,
-      isUseful: !!this.$route.query.tabIndex,
->>>>>>> 工作区的接口对接
       timeIndex: this.$route.query.fIndex,
       dataIndex: this.$route.query.cIndex
     }
@@ -95,13 +90,16 @@ export default {
         return true
       }
       // 当前时间段
-      const date = moment().format('YYYYMMDD')
+      const date = moment(this.showData[this.timeIndex].day).format('YYYY-MM-DD')
       const startMeetingTime = this.showData[this.timeIndex].data[this.dataIndex].startTime
       const endMeetingTime = this.showData[this.timeIndex].data[this.dataIndex].endTime
-      if (moment().isBefore(`${date} ${startMeetingTime}`) || moment().isAfter(`${date} ${endMeetingTime}`)) {
-        return true
+      if (
+        moment().isBefore(`${date} ${endMeetingTime}`) &&
+        moment().isAfter(`${date} ${startMeetingTime}`)
+      ) {
+        return false
       }
-      return false
+      return true
     },
     showData() {
       return this.meetingData(this.$route.query.tabIndex)

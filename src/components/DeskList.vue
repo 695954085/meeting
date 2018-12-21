@@ -70,26 +70,27 @@ export default {
     async handleClick(id, occupy) {
       if (occupy === 0) {
         // eslint-disable-next-line
-        cordova.plugins.barcodeScanner.scan(
-          result => {
-            console.log(`barcode${result.text}`)
-            console.log(`barcode${result.format}`)
-            console.log(`barcode${result.cancelled}`)
-            if (!result.cancelled) {
-              try {
-                let aaa = await this.updateDeskState(
-                  result.text,
-                  this.user.usercard
-                )
-              } catch (err) {
-                vuxInfo(this, err)
-              }
-            }
-          },
-          error => {
-            vuxInfo(this, 'Scanning failed: ' + error)
-          }
-        )
+        // cordova.plugins.barcodeScanner.scan(
+        //   result => {
+        //     console.log(`barcode${result.text}`)
+        //     console.log(`barcode${result.format}`)
+        //     console.log(`barcode${result.cancelled}`)
+        //     // 要用promise实现同步
+        //     if (!result.cancelled) {
+        //       try {
+        //         let aaa = this.updateDeskState(
+        //           result.text,
+        //           this.user.usercard
+        //         )
+        //       } catch (err) {
+        //         vuxInfo(this, err)
+        //       }
+        //     }
+        //   },
+        //   error => {
+        //     vuxInfo(this, 'Scanning failed: ' + error)
+        //   }
+        // )
       } else {
         // index === 1的情况
         let responseValue
