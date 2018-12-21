@@ -71,7 +71,7 @@ const degressDate = data => {
   data.forEach(element => {
     exchange.push(new Date(element))
   })
-  exchange.sort(function (a, b) {
+  exchange.sort(function(a, b) {
     return a > b ? 1 : -1
   })
   exchange.forEach(element => {
@@ -81,9 +81,19 @@ const degressDate = data => {
   })
   return returnValue
 }
+
+// date对象返回指定格式
+const getFormatDateString = (date, connector) => {
+  let year = date.getFullYear()
+  let month = date.getMonth() + 1
+  let day = date.getDate()
+  return `${year}${connector}${month}${connector}${day}`
+}
+
 export default {
   getTime,
   getTimeSpace,
   compareTime,
-  degressDate
+  degressDate,
+  getFormatDateString
 }

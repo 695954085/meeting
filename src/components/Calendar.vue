@@ -6,13 +6,13 @@
         <ul>
           <!--点击会触发pickpre函数，重新刷新当前日期 @click(vue v-on:click缩写) -->
           <li class="arrow"
-              @click="pickPre(currentYear,currentMonth)">❮</li>
+              @click.stop="pickPre(currentYear,currentMonth)">❮</li>
           <li class="year-month"
-              @click="pickYear(currentYear,currentMonth)">
+              @click.stop="pickYear(currentYear,currentMonth)">
             <span class="choose-year-month">{{ currentYear }}年{{ currentMonth }}月</span>
           </li>
           <li class="arrow"
-              @click="pickNext(currentYear,currentMonth)">❯</li>
+              @click.stop="pickNext(currentYear,currentMonth)">❯</li>
         </ul>
       </div>
       <!-- 星期 -->
@@ -30,7 +30,7 @@
         <!-- 核心 v-for循环 每一次循环用<li>标签创建一天 -->
         <li v-for="(dayobject,index) in days"
             :key="index"
-            @click="handleSelect(dayobject)"
+            @click.stop="handleSelect(dayobject)"
             :class="{isSelect:dayobject.isSelect}">
           <!--本月-->
           <!--如果不是本月  改变类名加灰色-->

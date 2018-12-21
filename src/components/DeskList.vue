@@ -1,20 +1,21 @@
 <template>
   <div class="deskList">
     <div class="deskBook-card"
-         v-for="(item,index) in bookRecord"
-         :key="index">
-      <div class="deskBook-body">
+         v-for="item in deskBookRecord"
+         :key="item.id">
+      <div class="deskBook-body"
+           :class="{occupy: parseInt(item.occupy)===1?true:false}">
         <div class="deskBook-body-left">
-          <div class="deskBook-body-desk">{{item.deskNumber}}</div>
-          <div class="deskBook-body-time">{{item.deskDate}}</div>
-          <div class="deskBook-body-state">{{item.deskState}}</div>
+          <div class="deskBook-body-desk">{{deskNumber[parseInt(item.station)-1]}}</div>
+          <div class="deskBook-body-time">{{item.startTime}}-{{item.endTime}}</div>
+          <div class="deskBook-body-state">{{deskState[parseInt(item.occupy)]}}</div>
         </div>
         <i class="iconfont icon-yizi"></i>
       </div>
       <div class="deskBook-footer">
         <div class="deskBook-footernavigation">导航</div>
         <div class="deskBook-footerchageState"
-             @click="handleClick">开始使用</div>
+             @click="handleClick(item.id,item.occupy)">{{deskStateText[parseInt(item.occupy)]}}</div>
       </div>
     </div>
     <div class="deskBook-card-add"
@@ -29,54 +30,97 @@
   </div>
 </template>
 <script>
+import { mapState, mapMutations } from 'vuex'
+import { getDeskList, releaseDesk, updateDeskState } from '@/api/'
+import { vuxInfo } from '@/utils/alert.js'
 export default {
   name: 'DeskList',
   data() {
     return {
-      bookRecord: [
-        {
-          deskNumber: '5号工位',
-          deskDate: '2018.12.03-12.06(3天)',
-          deskState: '使用中'
-        },
-        {
-          deskNumber: '4号工位',
-          deskDate: '2018.12.03-12.06(3天)',
-          deskState: '未使用'
-        }
-      ]
+      deskState: ['未使用', '使用中'],
+      deskStateText: ['开始使用', '提前释放'],
+      deskNumber: ['1号工位', '2号工位', '3号工位', '4号工位']
     }
   },
+  async mounted() {
+    let responseValue
+    try {
+      responseValue = await getDeskList(this.user.usercard)
+    } catch (err) {
+      vuxInfo(this, err)
+      return
+    }
+    console.log(responseValue)
+    let { status, data } = responseValue
+    if (status !== 200) {
+      vuxInfo(this, '请求异常')
+    } else {
+      this.setdeskBookRecord(data)
+    }
+  },
+  computed: {
+    ...mapState('workarea', ['deskBookRecord']),
+    ...mapState('meeting', ['user'])
+  },
   methods: {
+    ...mapMutations('workarea', ['setdeskBookRecord']),
     deskBookAdd() {
       this.$router.push(`/addDesk`)
     },
-    handleClick: function() {
-      // eslint-disable-next-line
-      cordova.plugins.barcodeScanner.scan(
-        function(result) {
-          alert(
-            'We got a barcode\n' +
-              'Result: ' +
-              result.text +
-              '\n' +
-              'Format: ' +
-              result.format +
-              '\n' +
-              'Cancelled: ' +
-              result.cancelled
-          )
-        },
-        function(error) {
-          alert('Scanning failed: ' + error)
+    async handleClick(id, occupy) {
+      if (occupy === 0) {
+        // eslint-disable-next-line
+        cordova.plugins.barcodeScanner.scan(
+          result => {
+            console.log(`barcode${result.text}`)
+            console.log(`barcode${result.format}`)
+            console.log(`barcode${result.cancelled}`)
+            if (!result.cancelled) {
+              try {
+                let aaa = await this.updateDeskState(
+                  result.text,
+                  this.user.usercard
+                )
+              } catch (err) {
+                vuxInfo(this, err)
+              }
+            }
+          },
+          error => {
+            vuxInfo(this, 'Scanning failed: ' + error)
+          }
+        )
+      } else {
+        // index === 1的情况
+        let responseValue
+        try {
+          responseValue = await releaseDesk(id)
+        } catch (err) {
+          vuxInfo(this, err)
+          return
         }
-      )
+        const { status, data } = responseValue
+        if (status !== 200) {
+          vuxInfo(this, '服务器异常')
+        } else {
+          if (data.status === 'success') {
+            vuxInfo(this, '释放成功', () => {
+              // 释放之后要做啥？？
+            })
+          } else {
+            vuxInfo(this, data.msg)
+          }
+        }
+        console.log(responseValue)
+      }
     }
   }
 }
 </script>
 <style lang="less" scoped>
 .deskList {
+  height: 100%;
+  overflow: auto;
   .deskBook-card {
     width: 686px;
     height: 306px;
@@ -84,6 +128,14 @@ export default {
     margin: 0 auto;
     padding: 20px 0;
     .deskBook-body {
+      &.occupy {
+        background-image: linear-gradient(-45deg, #fe7d46 1%, #fe994e 100%),
+          linear-gradient(#ffffff, #ffffff);
+        background-blend-mode: normal, normal;
+        .icon-yizi {
+          color: #fc6822;
+        }
+      }
       width: 686px;
       height: 226px;
       background-image: linear-gradient(-45deg, #5060fe 1%, #409cfc 100%),

@@ -22,11 +22,15 @@
       </cell>
     </group>
     <div class="adddesk-show-calendar"
-         v-if="showCalendar">
+         v-if="showCalendar"
+         @click="handleHideTime">
       <div class="adddesk-show-bottom">
-        <div class="adddesk-show-title">选择预约使用工位日期
-          <span class="adddesk-show-certain"
-                @click="certainTime">确定</span>
+        <div class="adddesk-show-title">
+          <div class="adddesk-show-certain"
+               @click.stop="cancelTime">取消</div>
+          <div>选择预约使用工位日期</div>
+          <div class="adddesk-show-cancel"
+               @click.stop="certainTime">确定</div>
         </div>
         <Calendar></Calendar>
       </div>
@@ -38,7 +42,8 @@ import Calendar from '@/components/Calendar'
 import { Actionsheet, Cell } from 'vux'
 import { mapMutations, mapState } from 'vuex'
 import { vuxInfo } from '@/utils/alert.js'
-import { bookStaion } from '@/api/'
+import { bookStation } from '@/api/'
+import Time from '@/utils/time.js'
 export default {
   name: 'AddDesk',
   components: {
@@ -53,7 +58,11 @@ export default {
     }
   },
   methods: {
-    ...mapMutations('workarea', ['setdeskBookDateCertain', 'setdeskBookDate']),
+    ...mapMutations('workarea', [
+      'setdeskBookDateCertain',
+      'setdeskBookDate',
+      'restoreDeskBookSeatData'
+    ]),
     handleReturn() {},
     handleSelectDesk() {
       this.$router.push(`/selectDesk`)
@@ -65,6 +74,11 @@ export default {
       this.setdeskBookDate([])
     },
     getStationValue() {
+      if (!this.deskSeatCertain) {
+        // 没有确认座位的时候不执行并清空数据
+        this.restoreDeskBookSeatData()
+        return ''
+      }
       let selectOne = this.deskBookSeatData.find(
         character => character.isActive === true
       )
@@ -75,34 +89,31 @@ export default {
       return index.toString()
     },
     certainTime() {
+      // 这里需要校验一下选择时间是否合法
       this.showCalendar = false
       this.setdeskBookDateCertain(true)
-      // if (this.deskBookDate.length === 2) {
-      //   let startYear = this.deskBookDate[0].day.getFullYear()
-      //   let startMonth = this.deskBookDate[0].day.getMonth() + 1
-      //   let startDay = this.deskBookDate[0].day.getDate()
-      //   let endYear = this.deskBookDate[1].day.getFullYear()
-      //   let endMonth = this.deskBookDate[1].day.getMonth() + 1
-      //   let endDay = this.deskBookDate[1].day.getDate()
-      //   this.timeValue = `${startYear}.${startMonth}.${startDay}-${endYear}.${endMonth}.${endDay}`
-      // }
+    },
+    cancelTime() {
+      this.showCalendar = false
+      this.setdeskBookDate([])
+    },
+    handleHideTime() {
+      this.showCalendar = false
+      this.setdeskBookDate([])
     },
     async handleComplate() {
       let responseValue
       try {
-        let startYear = this.deskBookDate[0].day.getFullYear()
-        let startMonth = this.deskBookDate[0].day.getMonth() + 1
-        let startDay = this.deskBookDate[0].day.getDate()
-        let endYear = this.deskBookDate[1].day.getFullYear()
-        let endMonth = this.deskBookDate[1].day.getMonth() + 1
-        let endDay = this.deskBookDate[1].day.getDate()
+        let start = Time.getFormatDateString(this.deskBookDate[0].day, '/')
+        let end = Time.getFormatDateString(this.deskBookDate[1].day, '/')
         let station = this.getStationValue()
         const params = new URLSearchParams()
-        params.append('usercard', this.user.usercard)
+        params.append('userCard', this.user.usercard)
         params.append('station', station)
-        params.append('startTime', `${startYear}/${startMonth}/${startDay}`)
-        params.append('endTime', `${endYear}/${endMonth}/${endDay}`)
-        responseValue = await bookStaion(params)
+        params.append('startTime', start)
+        params.append('endTime', end)
+        responseValue = await bookStation(params)
+        console.log(responseValue)
       } catch (err) {
         vuxInfo(this, err)
         return
@@ -112,9 +123,12 @@ export default {
         vuxInfo(this, '服务器异常')
       } else {
         if (data.status === 'success') {
-          console.log(data.msg)
-          console.log(data.data)
-          this.$router.push(`/deskBook`)
+          vuxInfo(this, '预定工位成功', () => {
+            // 清空预定时间
+            this.setdeskBookDate([])
+            this.restoreDeskBookSeatData()
+            this.$router.push(`/deskBook`)
+          })
         } else {
           vuxInfo(this, data.msg)
         }
@@ -127,11 +141,12 @@ export default {
     }
   },
   computed: {
-    ...mapState('metting', ['user']),
+    ...mapState('meeting', ['user']),
     ...mapState('workarea', [
       'deskBookDate',
       'deskBookSeatData',
-      'deskBookDateCertain'
+      'deskBookDateCertain',
+      'deskSeatCertain'
     ]),
     deskValue: function() {
       return this.getStationValue()
@@ -139,14 +154,9 @@ export default {
     timeValue: function() {
       if (this.deskBookDateCertain) {
         if (this.deskBookDate.length === 2) {
-          // 后需考虑抽成getters
-          let startYear = this.deskBookDate[0].day.getFullYear()
-          let startMonth = this.deskBookDate[0].day.getMonth() + 1
-          let startDay = this.deskBookDate[0].day.getDate()
-          let endYear = this.deskBookDate[1].day.getFullYear()
-          let endMonth = this.deskBookDate[1].day.getMonth() + 1
-          let endDay = this.deskBookDate[1].day.getDate()
-          return `${startYear}.${startMonth}.${startDay}-${endYear}.${endMonth}.${endDay}`
+          let start = Time.getFormatDateString(this.deskBookDate[0].day, '.')
+          let end = Time.getFormatDateString(this.deskBookDate[1].day, '.')
+          return `${start}-${end}`
         }
       }
       return ''
@@ -178,6 +188,10 @@ export default {
         font-size: 32px;
         font-weight: normal;
         color: #333333;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        .adddesk-show-cancel,
         .adddesk-show-certain {
           float: right;
           color: #fa6017;

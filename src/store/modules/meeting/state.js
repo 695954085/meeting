@@ -2,8 +2,8 @@ import Week from '@/utils/week.js'
 import Time from '@/utils/time.js'
 export default {
   user: {
-    usercard: '',
-    username: ''
+    usercard: 'A1001',
+    username: '郑旭涛'
   },
   filterData: [], // 孩子和meetingData格式一致，存放是否完成分类
   showData: [],

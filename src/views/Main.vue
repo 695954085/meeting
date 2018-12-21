@@ -133,6 +133,10 @@ export default {
   }
   .weui-grid {
     background-color: #ffffff;
+    .weui-grid__icon {
+      width: 56px;
+      height: 56px;
+    }
   }
   .bottom-actionbar {
     position: fixed;

@@ -58,7 +58,12 @@ export default {
     return {
       clockSize: '96px',
       roomMenu: ['会议室1', '会议室2', '会议室3'],
+<<<<<<< df224a72b40b63329cd0978762d3050ac65950c4
       lightState: false,
+=======
+      lightState: true,
+      isUseful: !!this.$route.query.tabIndex,
+>>>>>>> 工作区的接口对接
       timeIndex: this.$route.query.fIndex,
       dataIndex: this.$route.query.cIndex
     }

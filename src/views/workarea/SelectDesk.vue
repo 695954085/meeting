@@ -1,7 +1,6 @@
 <template>
   <div class="selectDesk">
-    <x-header :left-options="{backText: ''}"
-              @on-click-back="handlexx">工位选择
+    <x-header :left-options="{backText: ''}">工位选择
       <a slot="right"
          @click="handleComplate">确定</a>
     </x-header>
@@ -23,16 +22,47 @@
 </template>
 <script>
 import { mapMutations, mapState } from 'vuex'
+import { getDeskState } from '@/api/'
+import Time from '@/utils/time.js'
+import { vuxInfo } from '@/utils/alert.js'
 export default {
   name: 'SelectDesk',
   data() {
     return {}
   },
+  async mounted() {
+    if (this.deskBookDate === undefined || this.deskBookDate.length === 0) {
+      vuxInfo(this, '请先选择预定时间', () => {
+        this.$router.push('/addDesk')
+      })
+      return
+    }
+    let start = Time.getFormatDateString(this.deskBookDate[0].day, '/')
+    let end = Time.getFormatDateString(this.deskBookDate[1].day, '/')
+    let responseValue = await getDeskState(start, end)
+    console.log(responseValue)
+    let { status, data } = responseValue
+    if (status !== 200) {
+      vuxInfo(this, '请求异常')
+    } else {
+      this.restoreDeskBookSeatData()
+      this.setunableBookSeatData(data)
+    }
+  },
   computed: {
-    ...mapState('workarea', ['deskBookSeatData'])
+    ...mapState('workarea', [
+      'deskSeatCertain',
+      'deskBookSeatData',
+      'deskBookDate'
+    ])
   },
   methods: {
-    ...mapMutations('workarea', ['setdeskBookSeatData']),
+    ...mapMutations('workarea', [
+      'setdeskBookSeatData',
+      'setunableBookSeatData',
+      'restoreDeskBookSeatData',
+      'setdeskSeatCertain'
+    ]),
     handleSelect(index) {
       if (this.deskBookSeatData[index].isAble === false) {
         return
@@ -45,6 +75,7 @@ export default {
       this.setdeskBookSeatData(dataList)
     },
     handleComplate() {
+      this.setdeskSeatCertain(true)
       this.$router.push(`/addDesk`)
     }
   }
@@ -58,7 +89,7 @@ export default {
   .selectDesk-main {
     width: 100%;
     height: calc(100% - 46px);
-    background-color: #ffaabb;
+    background-color: #f2f2f2;
     display: flex;
     align-items: center;
     .desk-image-wrap {
@@ -78,6 +109,7 @@ export default {
           line-height: 40px;
           width: 97px;
           background: url('../../assets/images/empty-desk.png') no-repeat;
+          background-size: contain;
           display: flex;
           align-items: flex-end;
           justify-content: center;
@@ -89,9 +121,11 @@ export default {
           }
           &.isActive {
             background: url('../../assets/images/select-desk.png') no-repeat;
+            background-size: contain;
           }
           &.isAble {
             background: url('../../assets/images/unable-desk.png') no-repeat;
+            background-size: contain;
           }
         }
       }

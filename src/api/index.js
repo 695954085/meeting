@@ -53,7 +53,7 @@ export const lightControl = params =>
   )
 // 工位预约
 
-export const bookStaion = params =>
+export const bookStation = params =>
   instance.post(
     `${config.IP}:${config.PORT}${config.prefix}/bookStation`,
     params
@@ -73,4 +73,18 @@ export const getDeskState = (startTime, endTime) =>
     `${config.IP}:${config.PORT}${
       config.prefix
     }/station-busy-list/?startTime=${startTime}&endTime=${endTime}`
+  )
+// 显示屏扫码后请求使用工位
+
+export const updateDeskState = (token, userCard) =>
+  instance.put(
+    `${config.IP}:${config.PORT}${
+      config.prefix
+    }/appointmentStation/${token}/userCard/${userCard}`
+  )
+
+// 提前释放工位
+export const releaseDesk = id =>
+  instance.delete(
+    `${config.IP}:${config.PORT}${config.prefix}/appointmentStation/${id}`
   )
