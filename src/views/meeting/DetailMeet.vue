@@ -46,6 +46,8 @@ import { Qrcode } from 'vux'
 import Clock from '@/components/Clock'
 import { mapGetters } from 'vuex'
 import { lightControl } from '@/api/'
+import moment from 'moment'
+
 export default {
   name: 'DetailMeet',
   components: {
@@ -57,7 +59,6 @@ export default {
       clockSize: '96px',
       roomMenu: ['会议室1', '会议室2', '会议室3'],
       lightState: false,
-      isUseful: !!this.$route.query.tabIndex,
       timeIndex: this.$route.query.fIndex,
       dataIndex: this.$route.query.cIndex
     }
@@ -83,6 +84,20 @@ export default {
     ...mapGetters('meeting', {
       meetingData: 'showData'
     }),
+    isUseful() {
+      // 已完成
+      if (this.tabIndex === 1) {
+        return true
+      }
+      // 当前时间段
+      const date = moment().format('YYYYMMDD')
+      const startMeetingTime = this.showData[this.timeIndex].data[this.dataIndex].startTime
+      const endMeetingTime = this.showData[this.timeIndex].data[this.dataIndex].endTime
+      if (moment().isBefore(`${date} ${startMeetingTime}`) || moment().isAfter(`${date} ${endMeetingTime}`)) {
+        return true
+      }
+      return false
+    },
     showData() {
       return this.meetingData(this.$route.query.tabIndex)
     },
