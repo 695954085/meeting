@@ -58,8 +58,8 @@ export default {
       roomMenu: ['会议室1', '会议室2', '会议室3'],
       lightState: false,
       isUseful: !!this.$route.query.tabIndex,
-      timeIndex: this.$route.query.cIndex,
-      dataIndex: this.$route.query.fIndex
+      timeIndex: this.$route.query.fIndex,
+      dataIndex: this.$route.query.cIndex
     }
   },
   filters: {
