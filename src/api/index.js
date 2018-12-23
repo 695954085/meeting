@@ -88,3 +88,5 @@ export const releaseDesk = id =>
   instance.delete(
     `${config.IP}:${config.PORT}${config.prefix}/appointmentStation/${id}`
   )
+
+export const getPosition = parmas => instance.post('http://10.8.6.4:4023/location/coordinate', parmas)
