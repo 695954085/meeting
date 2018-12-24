@@ -1,10 +1,7 @@
 <template>
-  <div class="roomMap">
-    <div
-      class="roomMap-dot-outer"
-      :style="{top:topValue, left:leftValue}"
-    >
-      <div class="roomMap-dot-inner">{{position.x + ',' + position.y}}</div>
+  <div class="roomMap" ref="roomMapRef">
+    <div class="roomMap-dot-outer" :style="{top:topValue, left:leftValue}">
+      <div class="roomMap-dot-inner"></div>
     </div>
   </div>
 </template>
@@ -16,12 +13,10 @@ export default {
   data() {
     return {
       deviceMap: new Map(),
-      topValue: '100px',
-      leftValue: '50px',
-      position: {
-        x: 0,
-        y: 0
-      }
+      topValue: '59.5vw',
+      leftValue: '100vw',
+      // 定时器
+      sid: 0
     }
   },
   methods: {
@@ -35,7 +30,7 @@ export default {
             // 放进到deviceMap中
             const { name, id, rssi } = device
             // 排除非183 蓝牙外设
-            if (!new RegExp(/\^183\d+$/).test(name)) return
+            if (!new RegExp(/^183\d{4}$/).test(name)) return
             let deviceList = this.deviceMap.get(name)
             if (!deviceList) {
               deviceList = []
@@ -51,7 +46,7 @@ export default {
         },
         () => {
           vuxInfo(this, '开启蓝牙权限以及定位权限', () => {
-          // eslint-disable-next-line
+            // eslint-disable-next-line
             ble.enable(
               () => {
                 this.locatedService()
@@ -67,7 +62,7 @@ export default {
     // 开启定时服务
     timedTask(timeout = 10000) {
       // 每隔10秒钟请求一次位置
-      setTimeout(() => {
+      this.sid = setTimeout(() => {
         // 判断10秒内，是否满足3个蓝牙设备
         if (!this.isSatisfiedThreeDevice()) {
           this.timedTask(5000)
@@ -97,7 +92,13 @@ export default {
     computedStrongestSignalDeviceList() {
       const signalDeviceList = []
       const iterator = this.deviceMap.entries()
-      for (let iteratorResult = iterator.next(); !iteratorResult.done; iteratorResult = iterator.next()) {
+      // console.log(JSON.stringify(this.deviceMap))
+      // 求平均值
+      for (
+        let iteratorResult = iterator.next();
+        !iteratorResult.done;
+        iteratorResult = iterator.next()
+      ) {
         const deviceName = iteratorResult.value[0]
         const deviceList = iteratorResult.value[1]
         // 求平均值
@@ -108,13 +109,18 @@ export default {
         })
         averageDevice['name'] = deviceName
         averageDevice['mac'] = deviceList[0]['mac']
-        averageDevice['rssi'] = sumRssi / deviceList.length
+        averageDevice['rssi'] = (sumRssi / deviceList.length).toFixed(6)
         signalDeviceList.push(averageDevice)
       }
+      // console.log('排序前')
+      // console.log(JSON.stringify(signalDeviceList))
+      // 排序
       signalDeviceList.sort((a, b) => {
-        return a.rssi >= b.rssi
+        return Number.parseFloat(b.rssi) - Number.parseFloat(a.rssi)
       })
-      return signalDeviceList.slice(0, 2)
+      // console.log('排序后')
+      // console.log(JSON.stringify(signalDeviceList))
+      return JSON.stringify(signalDeviceList.slice(0, 3))
     },
     // 上传前三最强信号蓝牙设备
     getXY(deviceList) {
@@ -123,13 +129,13 @@ export default {
     // 清除deviceMap数据
     deleteMapValue() {
       const iterator = this.deviceMap.keys()
-      for (const iteratorResult = iterator.next(); iteratorResult.done;) {
-        this.deviceMap.delete(iterator)
+      for (
+        let iteratorResult = iterator.next();
+        !iteratorResult.done;
+        iteratorResult = iterator.next()
+      ) {
+        this.deviceMap.delete(iteratorResult.value)
       }
-      // for (let iteratorResult = iterator.next(); iteratorResult.done;) {
-      //   const deviceList = this.deviceMap.get(iteratorResult.value)
-      //   deviceList.splice(0, deviceList.length)
-      // }
     },
     // 判断是够满足3个蓝牙外设
     isSatisfiedThreeDevice() {
@@ -137,7 +143,20 @@ export default {
     },
     // 实现定位
     positioning(coordinate) {
+      if (!coordinate) return
       // 实现换算
+      const { x, y } = coordinate
+      // const roomMapWidth = this.$refs['roomMapRef'].offsetWeight
+      // 坐标1代表的多少vw
+      const scale = 12.12
+      const leftOffset = x * scale
+      const topOffset = y * scale
+
+      const left = 100 - leftOffset
+      const top = 59.5 + topOffset
+
+      this.leftValue = left + 'vw'
+      this.topValue = top + 'vw'
     }
   },
   created() {
@@ -155,6 +174,7 @@ export default {
         console.log('ble扫描关闭异常')
       }
     )
+    clearTimeout(this.sid)
   }
 }
 </script>
@@ -177,6 +197,7 @@ export default {
     align-items: center;
     justify-content: center;
     position: absolute;
+    transform: translate(-50%, -50%);
     .roomMap-dot-inner {
       width: 32px;
       height: 32px;
