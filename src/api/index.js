@@ -3,7 +3,6 @@ import config from '../config'
 // 全局设置
 axios.defaults.timeout = 5000
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
-
 // 创建一个axios的实列
 const instance = axios.create()
 instance.defaults.headers.post['Content-Type'] =
@@ -90,3 +89,5 @@ export const releaseDesk = id =>
   instance.delete(
     `${config.IP}:${config.PORT}${config.prefix}/appointmentStation/${id}`
   )
+
+export const getPosition = parmas => instance.post(`${config.IP}:${config.PORT}/appointment/coordinate`, parmas)
