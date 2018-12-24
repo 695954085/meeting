@@ -165,7 +165,8 @@ export default {
       'bookTime',
       'currentday',
       'bookLocation',
-      'bookTitle'
+      'bookTitle',
+      'isBookTimeCertain'
     ]),
     subject: {
       get() {
@@ -181,8 +182,9 @@ export default {
     },
     timeValue: function() {
       let returnValue = '请选择'
-      if (this.bookTime.startTime && this.bookTime.endTime) {
-        returnValue =
+      if (this.isBookTimeCertain) {
+        if (this.bookTime.startTime && this.bookTime.endTime) {
+          returnValue =
           '周' +
           this.currentday.week +
           '(' +
@@ -190,8 +192,12 @@ export default {
           '/' +
           this.currentday.day +
           ')'
-        returnValue += this.bookTime.startTime + '-' + this.bookTime.endTime
+          returnValue += this.bookTime.startTime + '-' + this.bookTime.endTime
+        }
+      } else {
+        this.clearbookTime()
       }
+
       return returnValue
     },
     roomValue: function() {

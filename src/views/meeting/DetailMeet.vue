@@ -18,7 +18,9 @@
               <div class="detail-meet-location">
                 <i class="icon iconfont icon-location"></i>
                 <span>{{roomMenu[detail.room-1]}}</span>
-                <span class="detail-meet-location-direct">导航</span>
+                <span class="detail-meet-location-direct" @click="toRoomMap(detail.room)">导航
+                  <i class="iconfont icon-navigation"></i>
+                </span>
               </div>
               <div class="detail-meet-personList">
                 <i class="icon iconfont icon-man"></i>
@@ -69,6 +71,14 @@ export default {
     }
   },
   methods: {
+    toRoomMap(value) {
+      this.$router.push({
+        path: '/deskBook',
+        query: {
+          roomValue: value
+        }
+      })
+    },
     async handleLight() {
       let params = new URLSearchParams()
       params.append(
@@ -190,6 +200,9 @@ export default {
                 line-height: 39px;
                 letter-spacing: 0px;
                 color: #366bfd;
+                .icon-navigation{
+                  font-size: 28px;
+                }
               }
             }
           }

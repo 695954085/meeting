@@ -8,12 +8,36 @@ const getTime = () => {
       }
       let item = {}
       item.text = i + temp[j]
+
       item.isAble = true
       item.isSelect = false
       timeSlot.push(item)
     }
   }
   return timeSlot
+}
+const getPrevTimeSpace = (value) => {
+  let tempArr = value.split(':')
+  let nextValue = ''
+  if (tempArr[1] === '00') {
+    nextValue = (parseInt(tempArr[0]) - 1).toString() + ':30'
+    if (nextValue === '9:30') {
+      nextValue = '09:30'
+    }
+  } else {
+    nextValue = tempArr[0] + ':00'
+  }
+  return nextValue
+}
+const getNextTimeSpace = (value) => {
+  let tempArr = value.split(':')
+  let nextValue = ''
+  if (tempArr[1] === '00') {
+    nextValue = tempArr[0] + ':30'
+  } else {
+    nextValue = (parseInt(tempArr[0]) + 1).toString() + ':00'
+  }
+  return nextValue
 }
 const getTimeSpace = data => {
   let startTime = data.startTime
@@ -95,5 +119,7 @@ export default {
   getTimeSpace,
   compareTime,
   degressDate,
-  getFormatDateString
+  getFormatDateString,
+  getPrevTimeSpace,
+  getNextTimeSpace
 }

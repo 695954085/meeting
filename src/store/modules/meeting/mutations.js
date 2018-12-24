@@ -36,7 +36,7 @@ export default {
           setIndex.push(i)
         }
         if (state.dayTime[i].text === element.endTime) {
-          setIndex.push(i)
+          setIndex.push(i - 1)
           break
         }
       }
@@ -48,52 +48,37 @@ export default {
       }
     })
     // 再对dayTime过滤一次,连在一起的isHalfAble状态为true的重置回false
-    for (let i = 0; i < state.dayTime.length - 1; i++) {
-      if (!state.dayTime[i].isAble && !state.dayTime[i + 1].isAble) {
-        if (state.dayTime[i - 1].isHalfAble || !state.dayTime[i - 1].isAble) {
-          // 下一个兄弟是unabled,上一个兄弟是头的时候
-          continue
-        } else {
-          state.dayTime[i].isHalfAble = true
-          state.dayTime[i].isAble = true
-        }
-      }
-      if (!state.dayTime[i].isAble && state.dayTime[i + 1].isAble) {
-        // 下一个兄弟是able的时候
-        state.dayTime[i].isHalfAble = true
-        state.dayTime[i].isAble = true
-      }
-    }
+    // for (let i = 0; i < state.dayTime.length - 1; i++) {
+    //   if (!state.dayTime[i].isAble && !state.dayTime[i + 1].isAble) {
+    //     if (state.dayTime[i - 1].isHalfAble || !state.dayTime[i - 1].isAble) {
+    //       // 下一个兄弟是unabled,上一个兄弟是头的时候
+    //       continue
+    //     } else {
+    //       state.dayTime[i].isHalfAble = true
+    //       state.dayTime[i].isAble = true
+    //     }
+    //   }
+    //   if (!state.dayTime[i].isAble && state.dayTime[i + 1].isAble) {
+    //     // 下一个兄弟是able的时候
+    //     state.dayTime[i].isHalfAble = true
+    //     state.dayTime[i].isAble = true
+    //   }
+    // }
   },
-
-  setbookTime: (state, data) => {
-    // 保存修改时间
-    if (state.bookTime.startTime && state.bookTime.endTime) {
-      // 都有值时需先清空对象
-      state.bookTime = {}
-    }
-    Object.assign(state.bookTime, data)
-    // 时间值校验
-    if (!Time.compareTime(state.bookTime)) {
-      state.bookTime = {}
-    }
-    // 处理日期数据
-    if (state.bookTime.startTime && !state.bookTime.endTime) {
-      for (let i = 0; i < state.dayTime.length; i++) {
-        if (state.dayTime[i].text === state.bookTime.startTime) {
+  setbookTime2: (state, data) => {
+    // 1存储预约时间状态
+    state.bookTime = data
+    // 更改一下dayTime的状态
+    let a = Time.getTimeSpace(state.bookTime)
+    // 删除数组最后一个元素,因为设置状态用不上
+    a.pop()
+    state.dayTime.forEach(element => {
+      element.isSelect = false
+    })
+    for (let i = 0; i < state.dayTime.length; i++) {
+      for (let j = 0; j < a.length; j++) {
+        if (state.dayTime[i].text === a[j]) {
           state.dayTime[i].isSelect = true
-        } else {
-          state.dayTime[i].isSelect = false
-        }
-      }
-    } else {
-      let a = Time.getTimeSpace(state.bookTime)
-      for (let i = 0; i < state.dayTime.length; i++) {
-        state.dayTime[i].isSelect = false
-        for (let j = 0; j < a.length; j++) {
-          if (state.dayTime[i].text === a[j]) {
-            state.dayTime[i].isSelect = true
-          }
         }
       }
     }
@@ -101,6 +86,9 @@ export default {
   clearbookTime: state => {
     // 清空预约时间段
     state.bookTime = {}
+  },
+  setisBookTimeCertain: (state, data) => {
+    state.isBookTimeCertain = data
   }
 }
 

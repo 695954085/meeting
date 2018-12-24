@@ -23,7 +23,7 @@
     </group>
     <div class="adddesk-show-calendar"
          v-if="showCalendar"
-         @click="handleHideTime">
+         @click="cancelTime">
       <div class="adddesk-show-bottom">
         <div class="adddesk-show-title">
           <div class="adddesk-show-certain"
@@ -44,6 +44,7 @@ import { mapMutations, mapState } from 'vuex'
 import { vuxInfo } from '@/utils/alert.js'
 import { bookStation } from '@/api/'
 import Time from '@/utils/time.js'
+import moment from 'moment'
 export default {
   name: 'AddDesk',
   components: {
@@ -90,14 +91,17 @@ export default {
     },
     certainTime() {
       // 这里需要校验一下选择时间是否合法
-      this.showCalendar = false
-      this.setdeskBookDateCertain(true)
+      let start = Time.getFormatDateString(this.deskBookDate[0].day, '-')
+      if (moment().isBefore(start) || moment().isSame(start, 'day')) {
+        this.showCalendar = false
+        this.setdeskBookDateCertain(true)
+      } else {
+        vuxInfo(this, '选择时间不合法，请重新选择', () => {
+          this.cancelTime()
+        })
+      }
     },
     cancelTime() {
-      this.showCalendar = false
-      this.setdeskBookDate([])
-    },
-    handleHideTime() {
       this.showCalendar = false
       this.setdeskBookDate([])
     },

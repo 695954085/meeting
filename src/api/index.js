@@ -44,15 +44,18 @@ export const getBookTimeSpace = (bookDate, room) =>
 export const getAdminCode = () =>
   instance.get(`${config.IP}:${config.PORT}${config.prefix}/admin-code`)
 
-// 会议室灯光控制
+// 删除会议记录
+export const deleteMeet = (id) =>
+  instance.delete(`${config.IP}:${config.PORT}${config.prefix}/appointmentRoom/${id}`)
 
+// 会议室灯光控制
 export const lightControl = params =>
   instance.post(
     `${config.IP}:${config.PORT}${config.prefix}/meeting-room-switchs`,
     params
   )
-// 工位预约
 
+// 工位预约
 export const bookStation = params =>
   instance.post(
     `${config.IP}:${config.PORT}${config.prefix}/bookStation`,
@@ -75,7 +78,6 @@ export const getDeskState = (startTime, endTime) =>
     }/station-busy-list/?startTime=${startTime}&endTime=${endTime}`
   )
 // 显示屏扫码后请求使用工位
-
 export const updateDeskState = (token, userCard) =>
   instance.put(
     `${config.IP}:${config.PORT}${

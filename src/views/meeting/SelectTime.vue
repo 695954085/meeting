@@ -1,6 +1,9 @@
 <template>
   <div class="select-time">
-    <x-header title="slot:overwrite-title">
+    <x-header
+      :left-options="{backText: '返回', preventGoBack:true}"
+      @on-click-back="handleReturn"
+    title="slot:overwrite-title">
       <div class="overwrite-title-demo"
            slot="overwrite-title">
         <div @click="handleSelectRoom">{{roomName}}</div>
@@ -11,7 +14,6 @@
       <a slot="right"
          @click="certainBookTime">确定</a>
     </x-header>
-
     <div class="select-time-content">
       <div class="select-time-calendar">
         <div class="week-title">
@@ -33,6 +35,12 @@
       </div>
       <div class="select-time-divider"></div>
       <div class="select-time-date">{{getCurrentDay}}</div>
+      <div class="select-time-tip">
+        <div class="select-time-color"></div><div>半小时/格</div>
+      </div>
+      <div class="select-time-currentSpace">
+        {{bookTime.startTime}} - {{bookTime.endTime}}
+      </div>
       <div class="select-time-block">
         <div v-for="(items,index) in timeSlot"
              :key="index"
@@ -42,7 +50,6 @@
                 class="select-time-inner"
                 :class="{
                   unable: !item.isAble,
-                  halfable: item.isHalfAble,
                   select: item.isSelect }"
                 @click="handleSelectTime(item.text)">{{item.text}}
           </span>
@@ -79,9 +86,14 @@ export default {
     ...mapMutations('meeting', [
       'selectWeek',
       'setdayTime',
-      'setbookTime',
-      'setbookLocation'
+      'setbookLocation',
+      'setisBookTimeCertain',
+      'setbookTime2'
     ]),
+    handleReturn() {
+      this.setbookTime2({startTime: '', endTime: ''})
+      this.$router.push(`/addMeet`)
+    },
     handleSelectRoom() {
       this.showRoom = true
     },
@@ -92,10 +104,9 @@ export default {
       // unableArr是所有不可用的数组
       let unableArr = this.dayTime.filter(this.hasTimeAble(false))
       if (currentTime.isAble) {
-        if (this.bookTime.startTime && !this.bookTime.endTime) {
-          let haha = this.dayTime.find(
-            this.hasTimeText(this.bookTime.startTime)
-          )
+        // 选择一个的情况
+        let bStart = Time.getNextTimeSpace(this.bookTime.startTime)
+        if (bStart === this.bookTime.endTime && Time.compareTime({startTime: this.bookTime.startTime, endTime: value})) {
           let selectspace = Time.getTimeSpace({
             startTime: this.bookTime.startTime,
             endTime: value
@@ -103,24 +114,27 @@ export default {
           for (let i = 0; i < selectspace.length; i++) {
             if (unableArr.some(this.hasTimeText(selectspace[i]))) {
               tempBool = true
-              break
-            }
-            if (haha.isHalfAble && currentTime.isHalfAble) {
-              // halfAble头尾时不可选
-              tempBool = true
+              // 跳不可选的格时置回单个这种情况
+              this.setbookTime2({
+                startTime: value,
+                endTime: Time.getNextTimeSpace(value) })
               break
             }
           }
           if (!tempBool) {
-            // 不可选的数据数组里不和选择的时间段重叠时才设置结束时间
-            this.setbookTime({ endTime: value })
+            this.setbookTime2({
+              startTime: this.bookTime.startTime,
+              endTime: Time.getNextTimeSpace(value) })
           }
         } else {
-          this.setbookTime({ startTime: value })
+          this.setbookTime2({
+            startTime: value,
+            endTime: Time.getNextTimeSpace(value) })
         }
       }
     },
     certainBookTime() {
+      this.setisBookTimeCertain(true)
       this.$router.push(`/addMeet`)
     },
     hasTimeText(text) {
@@ -136,6 +150,8 @@ export default {
     },
     // 请求对应日期房间数据
     async queryState() {
+      // 清空预约时间
+      this.setbookTime2({startTime: '', endTime: ''})
       // 请求数据状态
       let comitDate = `${this.currentday.year}/${this.currentday.month}/${
         this.currentday.day
@@ -151,7 +167,7 @@ export default {
       // let a = [{ startTime: '13:00', endTime: '15:30' }]
       // this.setdayTime(a)
     },
-    async handleSelectDay(index) {
+    handleSelectDay(index) {
       // 设置选中日期
       this.selectWeek(index)
       this.queryState()
@@ -230,7 +246,6 @@ export default {
         display: flex;
         padding: 8px 0;
         & > div {
-          // flex-grow: 1;
           width: 106px;
           height: 106px;
           display: flex;
@@ -260,6 +275,7 @@ export default {
       background-color: #e9e9e9;
     }
     .select-time-date {
+      margin-top: 30px;
       font-family: PingFangSC-Regular;
       font-size: 30px;
       color: #333333;
@@ -267,11 +283,31 @@ export default {
       height: 52px;
       line-height: 52px;
     }
+    .select-time-tip{
+      width: 84%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      color: #333333;
+      margin-top: 30px;
+      font-size: 20px;
+      .select-time-color{
+        width: 30px;
+        height: 30px;
+        margin:0 20px;
+        background-color: #1978fe;
+      }
+    }
+    .select-time-currentSpace{
+       margin-top: 50px;
+       font-size: 30px;
+       color: #333333;
+    }
     .select-time-block {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      margin-top: 60px;
+      margin-top: 10px;
       .select-time-outter {
         height: 80px;
         line-height: 80px;
