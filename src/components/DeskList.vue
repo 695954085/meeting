@@ -1,19 +1,19 @@
 <template>
   <div class="deskList">
     <div class="deskBook-card"
-         v-for="item in deskBookRecord"
+         v-for="item in getDeskBookList"
          :key="item.id">
       <div class="deskBook-body"
            :class="{occupy: parseInt(item.occupy)===1?true:false}">
         <div class="deskBook-body-left">
           <div class="deskBook-body-desk">{{deskNumber[parseInt(item.station)-1]}}</div>
-          <div class="deskBook-body-time">{{item.startTime}}-{{item.endTime}}</div>
-          <div class="deskBook-body-state">{{deskState[parseInt(item.occupy)]}}</div>
+          <div class="deskBook-body-time"><i class="iconfont icon-clock"></i>{{item.startTime}}-{{item.endTime}}</div>
+          <div class="deskBook-body-state"><i class="iconfont icon-location"></i>{{deskState[parseInt(item.occupy)]}}</div>
         </div>
-        <i class="iconfont icon-yizi"></i>
+        <i class="iconfont icon-chair"></i>
       </div>
       <div class="deskBook-footer">
-        <div class="deskBook-footernavigation">导航</div>
+        <div class="deskBook-footernavigation">导航<i class="iconfont icon-navigation"></i></div>
         <div class="deskBook-footerchageState"
              @click="handleClick(item.id,item.occupy)">{{deskStateText[parseInt(item.occupy)]}}</div>
       </div>
@@ -43,54 +43,82 @@ export default {
     }
   },
   async mounted() {
-    let responseValue
-    try {
-      responseValue = await getDeskList(this.user.usercard)
-    } catch (err) {
-      vuxInfo(this, err)
-      return
-    }
-    console.log(responseValue)
-    let { status, data } = responseValue
-    if (status !== 200) {
-      vuxInfo(this, '请求异常')
-    } else {
-      this.setdeskBookRecord(data)
-    }
+    this.queryDataList()
   },
   computed: {
     ...mapState('workarea', ['deskBookRecord']),
-    ...mapState('meeting', ['user'])
+    ...mapState('meeting', ['user']),
+    getDeskBookList() {
+      let data = this.deskBookRecord.filter(character => character.state === '1')
+      return data
+    }
   },
   methods: {
     ...mapMutations('workarea', ['setdeskBookRecord']),
+    async queryDataList () {
+      let responseValue
+      try {
+        responseValue = await getDeskList(this.user.usercard)
+      } catch (err) {
+        vuxInfo(this, err)
+        return
+      }
+      console.log(responseValue)
+      let { status, data } = responseValue
+      if (status !== 200) {
+        vuxInfo(this, '请求异常')
+      } else {
+        this.setdeskBookRecord(data)
+      }
+    },
     deskBookAdd() {
       this.$router.push(`/addDesk`)
     },
     async handleClick(id, occupy) {
-      if (occupy === 0) {
-        // eslint-disable-next-line
-        // cordova.plugins.barcodeScanner.scan(
-        //   result => {
-        //     console.log(`barcode${result.text}`)
-        //     console.log(`barcode${result.format}`)
-        //     console.log(`barcode${result.cancelled}`)
-        //     // 要用promise实现同步
-        //     if (!result.cancelled) {
-        //       try {
-        //         let aaa = this.updateDeskState(
-        //           result.text,
-        //           this.user.usercard
-        //         )
-        //       } catch (err) {
-        //         vuxInfo(this, err)
-        //       }
-        //     }
-        //   },
-        //   error => {
-        //     vuxInfo(this, 'Scanning failed: ' + error)
-        //   }
-        // )
+      if (occupy === '0') {
+        cordova.plugins.barcodeScanner.scan(
+          async (result) => {
+            console.log(`barcode${result.text}`)
+            console.log(`barcode${result.format}`)
+            console.log(`barcode${result.cancelled}`)
+            if (!result.cancelled) {
+              try {
+                let responseValue = await updateDeskState(
+                  result.text,
+                  this.user.usercard
+                )
+                console.log(responseValue)
+                let { status, data } = responseValue
+                if (status !== 200) {
+                  vuxInfo(this, '请求异常')
+                } else {
+                  vuxInfo(this, data.msg, () => {
+                    this.queryDataList()
+                  })
+                }
+              } catch (err) {
+                console.log('fetch error:' + err)
+                vuxInfo(this, err)
+              }
+            }
+          },
+          (error) => {
+            vuxInfo(this, 'Scanning failed: ' + error)
+          },
+          {
+            preferFrontCamera: false, // iOS and Android
+            showFlipCameraButton: false, // iOS and Android
+            showTorchButton: false, // iOS and Android
+            torchOn: false, // Android, launch with the torch switched on (if available)
+            saveHistory: false, // Android, save scan history (default false)
+            prompt: '请对准工位二维码进行扫描', // Android
+            resultDisplayDuration: 300, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
+            formats: 'QR_CODE', // default: all but PDF_417 and RSS_EXPANDED
+            orientation: 'portrait', // Android only (portrait|landscape), default unset so it rotates with the device
+            disableAnimations: true, // iOS
+            disableSuccessBeep: false // iOS and Android
+          }
+        )
       } else {
         // index === 1的情况
         let responseValue
@@ -106,7 +134,8 @@ export default {
         } else {
           if (data.status === 'success') {
             vuxInfo(this, '释放成功', () => {
-              // 释放之后要做啥？？
+              // 刷新列表
+              this.queryDataList()
             })
           } else {
             vuxInfo(this, data.msg)
@@ -133,7 +162,7 @@ export default {
         background-image: linear-gradient(-45deg, #fe7d46 1%, #fe994e 100%),
           linear-gradient(#ffffff, #ffffff);
         background-blend-mode: normal, normal;
-        .icon-yizi {
+        .icon-chair {
           color: #fc6822;
         }
       }
@@ -146,6 +175,10 @@ export default {
       align-items: center;
       .deskBook-body-left {
         text-align: left;
+        .iconfont{
+          font-size: 30px;
+          margin-right: 10px;
+        }
         .deskBook-body-desk {
           font-family: PingFangSC-Medium;
           font-size: 36px;
@@ -165,7 +198,7 @@ export default {
           color: #ffffff;
         }
       }
-      .icon-yizi {
+      .icon-chair {
         font-size: 184px;
         color: #2942f1;
       }
@@ -181,12 +214,18 @@ export default {
       font-size: 32px;
       font-weight: normal;
       color: #366bfd;
+      .deskBook-footernavigation{
+        .icon-navigation{
+          margin-left: 6px;
+          font-size: 28px;
+        }
+      }
     }
   }
   .deskBook-card-add {
     width: 686px;
     height: 306px;
-    margin: 0 auto;
+    margin: 32px 32px 60px 32px;
     background-color: #ffffff;
     border-radius: 12px;
     border: solid 2px #cccccc;

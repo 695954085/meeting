@@ -216,7 +216,7 @@ export default {
 
   .month ul li {
     color: white;
-    font-size: 24px;
+    font-size: 26px;
     text-transform: uppercase;
     letter-spacing: 3px;
   }
@@ -224,6 +224,7 @@ export default {
   .weekdays {
     margin: 0;
     padding: 10px 0;
+    font-size: 26px;
     background-color: #1978fe;
     display: flex;
     flex-wrap: wrap;
@@ -256,7 +257,7 @@ export default {
     padding-bottom: 15px;
     padding-top: 15px;
     span {
-      font-size: 24px;
+      font-size: 26px;
       color: #000;
     }
     &.isSelect {

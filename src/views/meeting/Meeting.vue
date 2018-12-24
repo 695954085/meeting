@@ -3,8 +3,7 @@
     <x-header
       :left-options="{backText: '首页', preventGoBack:true}"
       @on-click-back="handleReturn"
-      title="slot:overwrite-title"
-    >
+      title="slot:overwrite-title">
       <div class="overwrite-title" slot="overwrite-title">
         <button-tab v-model="tabIndex">
           <button-tab-item>未完成</button-tab-item>
@@ -25,7 +24,7 @@
         <swipeout>
           <swipeout-item v-for="(mItem, mIndex) in item.data" :key="mIndex">
             <div slot="right-menu">
-              <swipeout-button @click.native="onButtonClick('delete')" type="warn">删除</swipeout-button>
+              <swipeout-button @click.native="onButtonClick(mItem.id)" type="warn">删除</swipeout-button>
             </div>
             <div class="meeting-blo" slot="content" @click="toMeetDetail(index, mIndex)">
               <div class="meeting-blo-left">
@@ -64,8 +63,9 @@ import {
 } from 'vux'
 import { mapMutations, mapState, mapGetters } from 'vuex'
 import Clock from '@/components/Clock'
-import { getMeeting } from '@/api/'
+import { getMeeting, deleteMeet } from '@/api/'
 import { vuxInfo } from '@/utils/alert.js'
+
 export default {
   name: 'meeting',
   components: {
@@ -93,6 +93,18 @@ export default {
     },
     handleAddmeeting() {
       this.$router.push(`/addMeet`)
+    },
+    async onButtonClick (type) {
+      let responseValue
+      responseValue = await deleteMeet(type)
+      let {status, data} = responseValue
+      if (status !== 200) {
+        vuxInfo(this, '服务器异常')
+      } else {
+        if (data === 'success') {
+          this.queryMeetingData()
+        }
+      }
     },
     toMeetDetail(fIndex, cIndex) {
       this.$router.push({

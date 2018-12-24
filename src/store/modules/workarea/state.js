@@ -6,7 +6,8 @@ export default {
       deskNumber: '5号工位',
       startTime: '2018/12/03',
       endTime: '2018/12/06',
-      occupy: '0'
+      occupy: '0',
+      state: '0'
     },
     {
       id: 2,
@@ -14,7 +15,8 @@ export default {
       deskNumber: '4号工位',
       startTime: '2018/12/08',
       endTime: '2018/12/15',
-      occupy: '1'
+      occupy: '1',
+      state: '0'
     }
   ],
   deskBookDateCertain: false, // 是否确认提交
