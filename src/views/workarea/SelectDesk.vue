@@ -33,7 +33,7 @@ export default {
   async mounted() {
     if (this.deskBookDate === undefined || this.deskBookDate.length === 0) {
       vuxInfo(this, '请先选择预定时间', () => {
-        this.$router.push('/addDesk')
+        this.$router.replace('/addDesk')
       })
       return
     }
@@ -76,7 +76,7 @@ export default {
     },
     handleComplate() {
       this.setdeskSeatCertain(true)
-      this.$router.push(`/addDesk`)
+      this.$router.replace(`/addDesk`)
     }
   }
 }

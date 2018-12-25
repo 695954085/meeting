@@ -80,7 +80,7 @@ export default {
   methods: {
     ...mapMutations('meeting', ['setbookPersonList']),
     certainBookPersonList() {
-      this.$router.push(`/addMeet`)
+      this.$router.replace(`/addMeet`)
     },
     removePerson(value) {
       let index = this.bookPersonList.indexOf(value)

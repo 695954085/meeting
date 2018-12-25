@@ -118,7 +118,7 @@ export default {
           vuxInfo(this, data.msg)
         } else {
           vuxInfo(this, data.msg, () => {
-            this.$router.push(`/`)
+            this.$router.replace(`/`)
           })
         }
       }

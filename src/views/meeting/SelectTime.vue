@@ -92,7 +92,7 @@ export default {
     ]),
     handleReturn() {
       this.setbookTime2({startTime: '', endTime: ''})
-      this.$router.push(`/addMeet`)
+      this.$router.replace(`/addMeet`)
     },
     handleSelectRoom() {
       this.showRoom = true
@@ -135,7 +135,7 @@ export default {
     },
     certainBookTime() {
       this.setisBookTimeCertain(true)
-      this.$router.push(`/addMeet`)
+      this.$router.replace(`/addMeet`)
     },
     hasTimeText(text) {
       return character => character.text === text
