@@ -79,6 +79,7 @@ export default {
     },
     async handleClick(id, occupy) {
       if (occupy === '0') {
+        // eslint-disable-next-line
         cordova.plugins.barcodeScanner.scan(
           async (result) => {
             console.log(`barcode${result.text}`)
