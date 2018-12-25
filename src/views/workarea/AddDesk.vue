@@ -67,7 +67,7 @@ export default {
     ]),
     handleReturn() {},
     handleSelectDesk() {
-      this.$router.push(`/selectDesk`)
+      this.$router.replace(`/selectDesk`)
     },
     handleSelectTime() {
       this.showCalendar = true
@@ -133,7 +133,7 @@ export default {
             this.setdeskBookDate([])
             this.restoreDeskBookSeatData()
             this.settabIndex(1)
-            this.$router.push(`/deskBook`)
+            this.$router.replace(`/deskBook`)
           })
         } else {
           vuxInfo(this, data.msg)
@@ -143,7 +143,7 @@ export default {
     },
     backToDesk() {
       this.settabIndex(1)
-      this.$router.push(`/deskBook`)
+      this.$router.replace(`/deskBook`)
       // 清除预定的记录
     }
   },

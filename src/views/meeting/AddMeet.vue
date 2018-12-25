@@ -64,7 +64,7 @@ export default {
       'clearbookTime'
     ]),
     handleReturn() {
-      this.$router.push(`/meeting`)
+      this.$router.replace(`/meeting`)
     },
     async handleComplate() {
       let params = new URLSearchParams()
@@ -124,7 +124,7 @@ export default {
             this.setbookLocation(0)
             this.clearbookTime()
             this.setbookPersonList([])
-            this.$router.push(`/meeting`)
+            this.$router.replace(`/meeting`)
           })
         } else {
           vuxInfo(this, data.msg)
@@ -153,10 +153,10 @@ export default {
       if (this.bookLocation === 0) {
         this.setbookLocation(1)
       }
-      this.$router.push(`/selectTime`)
+      this.$router.replace(`/selectTime`)
     },
     handleSelectPerson() {
-      this.$router.push(`/selectPerson`)
+      this.$router.replace(`/selectPerson`)
     }
   },
   computed: {
