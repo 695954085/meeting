@@ -46,7 +46,7 @@
 <script>
 import { Qrcode } from 'vux'
 import Clock from '@/components/Clock'
-import { mapGetters } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 import { lightControl } from '@/api/'
 import moment from 'moment'
 
@@ -71,13 +71,11 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('workarea', ['settabIndex', 'setcurrentPosition']),
     toRoomMap(value) {
-      this.$router.push({
-        path: '/deskBook',
-        query: {
-          roomValue: value
-        }
-      })
+      this.settabIndex(0)
+      this.setcurrentPosition(5)
+      this.$router.push(`/deskBook`)
     },
     async handleLight() {
       let params = new URLSearchParams()

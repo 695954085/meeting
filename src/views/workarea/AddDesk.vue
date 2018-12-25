@@ -62,7 +62,8 @@ export default {
     ...mapMutations('workarea', [
       'setdeskBookDateCertain',
       'setdeskBookDate',
-      'restoreDeskBookSeatData'
+      'restoreDeskBookSeatData',
+      'settabIndex'
     ]),
     handleReturn() {},
     handleSelectDesk() {
@@ -131,6 +132,7 @@ export default {
             // 清空预定时间
             this.setdeskBookDate([])
             this.restoreDeskBookSeatData()
+            this.settabIndex(1)
             this.$router.push(`/deskBook`)
           })
         } else {
@@ -140,6 +142,7 @@ export default {
       // this.$router.push(`/deskBook`)
     },
     backToDesk() {
+      this.settabIndex(1)
       this.$router.push(`/deskBook`)
       // 清除预定的记录
     }

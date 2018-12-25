@@ -43,5 +43,8 @@ export default {
       isActive: false,
       isAble: true
     }
-  ] // 当前所有工位状态
+  ], // 当前所有工位状态
+  tabIndex: 0, // 存储deskBook页的tab下标
+  currentPosition: 0// 存储需要定位的位置
+
 }

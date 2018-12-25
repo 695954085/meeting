@@ -2,6 +2,12 @@ export default {
   setdeskBookDate: (state, data) => {
     state.deskBookDate = data
   },
+  settabIndex: (state, data) => {
+    state.tabIndex = data
+  },
+  setcurrentPosition: (state, data) => {
+    state.currentPosition = data
+  },
   setdeskBookSeatData: (state, data) => {
     state.deskBookSeatData = data
   },

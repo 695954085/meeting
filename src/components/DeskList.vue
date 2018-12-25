@@ -13,7 +13,7 @@
         <i class="iconfont icon-chair"></i>
       </div>
       <div class="deskBook-footer">
-        <div class="deskBook-footernavigation">导航<i class="iconfont icon-navigation"></i></div>
+        <div class="deskBook-footernavigation" @click="toRoomMap(item.station)">导航<i class="iconfont icon-navigation"></i></div>
         <div class="deskBook-footerchageState"
              @click="handleClick(item.id,item.occupy)">{{deskStateText[parseInt(item.occupy)]}}</div>
       </div>
@@ -55,6 +55,9 @@ export default {
   },
   methods: {
     ...mapMutations('workarea', ['setdeskBookRecord']),
+    toRoomMap(value) {
+      this.$emit('ee', value)
+    },
     async queryDataList () {
       let responseValue
       try {
@@ -132,16 +135,14 @@ export default {
         if (status !== 200) {
           vuxInfo(this, '服务器异常')
         } else {
-          if (data.status === 'success') {
+          if (data === 'success') {
             vuxInfo(this, '释放成功', () => {
-              // 刷新列表
               this.queryDataList()
             })
           } else {
-            vuxInfo(this, data.msg)
+            vuxInfo(this, '释放失败')
           }
         }
-        console.log(responseValue)
       }
     }
   }

@@ -3,20 +3,41 @@
     <div class="roomMap-dot-outer" :style="{top:topValue, left:leftValue}">
       <div class="roomMap-dot-inner"></div>
     </div>
+    <i class="iconfont icon-location" v-show="isLocation" :style="{top:postion.top,left:postion.left}"></i>
   </div>
 </template>
 <script>
 import { getPosition } from '@/api'
 import { vuxInfo } from '@/utils/alert'
+
 export default {
   name: 'RoomMap',
+  props: ['locationValue'],
   data() {
     return {
       deviceMap: new Map(),
       topValue: '59.5vw',
       leftValue: '100vw',
       // 定时器
-      sid: 0
+      sid: 0,
+      locationData: [
+        {top: '0vw', left: '0vw'},
+        {top: '139vw', left: '43vw'},
+        {top: '139vw', left: '56vw'},
+        {top: '139vw', left: '69vw'},
+        {top: '139vw', left: '82vw'},
+        {top: '48vw', left: '56vw'}]
+    }
+  },
+  computed: {
+    postion: function() {
+      return this.locationData[this.locationValue]
+    },
+    isLocation: function() {
+      if (this.locationValue === 0) {
+        return false
+      }
+      return true
     }
   },
   methods: {
@@ -205,6 +226,11 @@ export default {
       border: 2px solid #ffffff;
       background-color: #366bfd;
     }
+  }
+  .icon-location{
+    position: absolute;
+    color: #fa6017;
+    font-size: 36px;
   }
 }
 </style>
