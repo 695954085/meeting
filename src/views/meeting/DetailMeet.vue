@@ -65,11 +65,6 @@ export default {
       dataIndex: this.$route.query.cIndex
     }
   },
-  filters: {
-    exchange: function(value) {
-      return value.split(',')
-    }
-  },
   methods: {
     ...mapMutations('workarea', ['settabIndex', 'setcurrentPosition']),
     toRoomMap(value) {
@@ -98,7 +93,7 @@ export default {
         return true
       }
       // 当前时间段
-      const date = moment(this.showData[this.timeIndex].day).format('YYYY-MM-DD')
+      const date = moment(new Date(this.showData[this.timeIndex].day).toISOString()).format('YYYY-MM-DD')
       const startMeetingTime = this.showData[this.timeIndex].data[this.dataIndex].startTime
       const endMeetingTime = this.showData[this.timeIndex].data[this.dataIndex].endTime
       if (
