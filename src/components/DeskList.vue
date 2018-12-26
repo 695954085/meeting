@@ -42,7 +42,7 @@ export default {
       deskNumber: ['1号工位', '2号工位', '3号工位', '4号工位']
     }
   },
-  async mounted() {
+  activated() {
     this.queryDataList()
   },
   computed: {

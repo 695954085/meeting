@@ -68,7 +68,7 @@ export default {
   methods: {
     toRoomMap(value) {
       this.$router.push({
-        path: '/deskbook',
+        path: '/deskBook',
         query: {
           currentPosition: 5
         }

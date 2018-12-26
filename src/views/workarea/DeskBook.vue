@@ -1,13 +1,12 @@
 <template>
   <div class="deskBook">
-    <x-header :left-options="{backText: '', preventGoBack: true}"
-              @on-click-back="handleReturn"
+    <x-header :left-options="{backText: '' }"
               title="slot:overwrite-title">
       <div class="overwrite-title"
            slot="overwrite-title">
         <button-tab v-model="tabIndex">
-          <button-tab-item @on-item-click="handleTab()">室内地图</button-tab-item>
-          <button-tab-item @on-item-click="handleTab()">工位预约</button-tab-item>
+          <button-tab-item>室内地图</button-tab-item>
+          <button-tab-item>工位预约</button-tab-item>
         </button-tab>
       </div>
     </x-header>
@@ -33,27 +32,27 @@ export default {
   },
   data() {
     return {
+      tabIndex: 0,
+      currentPosition: 0
     }
   },
-  props: {
-    tabIndex: {
-      type: Number,
-      default: 0
-    },
-    currentPosition: {
-      type: Number,
-      default: 0
+  watch: {
+    tabIndex(nV, oV) {
+      // 当tabIndex从0变为1的时候，清除掉旧的红标位置
+      this.currentPosition = nV === 1 ? 0 : this.currentPosition
     }
   },
   methods: {
     changeLocation(position) {
       this.tabIndex = 0
       this.currentPosition = parseInt(position)
-    },
-    handleReturn() {
-      this.$router.push(`/main`)
-    },
-    handleTab() {}
+    }
+  },
+  activated() {
+    this.currentPosition = this.$route.query.currentPosition || this.currentPosition
+  },
+  deactivated() {
+    this.currentPosition = 0
   }
 }
 </script>
