@@ -1,5 +1,5 @@
 <template>
-  <div class="roomMap" ref="roomMapRef">
+  <div class="roomMap">
     <div class="roomMap-dot-outer" :style="{top:topValue, left:leftValue}">
       <div class="roomMap-dot-inner"></div>
     </div>
