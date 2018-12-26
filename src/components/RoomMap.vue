@@ -209,9 +209,9 @@ export default {
   background-position: top;
   background-size: contain;
   .roomMap-dot-outer {
-    width: 92px;
-    height: 92px;
-    border-radius: 92px;
+    width: 130px;
+    height: 130px;
+    border-radius: 130px;
     border: solid 1px #65adff;
     background-color: rgba(0, 0, 0, 0.1);
     display: flex;
@@ -220,9 +220,9 @@ export default {
     position: absolute;
     transform: translate(-50%, -50%);
     .roomMap-dot-inner {
-      width: 32px;
-      height: 32px;
-      border-radius: 32px;
+      width: 40px;
+      height: 40px;
+      border-radius: 40px;
       border: 2px solid #ffffff;
       background-color: #366bfd;
     }
