@@ -6,7 +6,8 @@ export default [
   {
     path: '/deskBook',
     name: 'DeskBook',
-    component: DeskBook
+    component: DeskBook,
+    props: true
   },
   {
     path: '/addDesk',

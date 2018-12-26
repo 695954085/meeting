@@ -142,7 +142,6 @@ export default {
       // this.$router.push(`/deskBook`)
     },
     backToDesk() {
-      this.settabIndex(1)
       this.$router.replace(`/deskBook`)
       // 清除预定的记录
     }
