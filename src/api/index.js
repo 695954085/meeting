@@ -54,10 +54,9 @@ export const lightControl = params =>
     params
   )
 
-// 会议室TV控制
 export const tvControl = params =>
   instance.post(
-    `${config.IP}:${config.PORT}${config.prefix}/meeting-room-tvswitchs`,
+    `${config.IP}:${config.PORT}${config.prefix}/television`,
     params
   )
 

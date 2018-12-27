@@ -36,19 +36,24 @@
       </div>
       <div class="detail-meet-light">
         <div class="detail-meet-light-title">会议室顶灯</div>
+        <div  class="switch-light-block">
         <input class='switch-component'
                type='checkbox'
                v-model="lightState"
                @change="handleLight"
                :disabled="isUseful">
+        </div>
       </div>
       <div class="detail-meet-tv">
         <div class="detail-meet-tv-title">会议室TV</div>
-        <input class='switch-component'
-               type='checkbox'
-               v-model="tvState"
-               @change="handleTV"
-               :disabled="isUseful">
+              <div class="switch-tv-block">
+                <i class="icon iconfont icon-hdmi"
+                @click="handleDevice('ton',isUseful)"
+                :class="{active:!isUseful}"></i>
+                <i class="icon iconfont icon-power"
+                 @click="handleDevice('channel',isUseful)"
+                 :class="{active:!isUseful}"></i>
+              </div>
       </div>
     </div>
   </div>
@@ -94,17 +99,16 @@ export default {
       let responseValue = await lightControl(params)
       console.log(responseValue)
     },
-    async handleTV() {
-      let params = new URLSearchParams()
-      params.append(
-        'room',
-        this.showData[this.timeIndex].data[this.dataIndex].room
-      )
-      params.append('method', this.tvState ? 'Open' : 'Close')
-      let responseValue = await tvControl(params)
-      console.log(responseValue)
+    async handleDevice(value, isUseful) {
+      // alert(isUseful)
+      if (!isUseful) {
+        let params = new URLSearchParams()
+        params.append('tvNum', '5')
+        params.append('method', value)
+        let responseValue = await tvControl(params)
+        console.log(responseValue)
+      }
     }
-
   },
   computed: {
     ...mapGetters('meeting', {
@@ -115,7 +119,7 @@ export default {
       return _.isNumber(index) ? index : Number.parseInt(index)
     },
     dataIndex() {
-      const index = this.$route.query.fIndex
+      const index = this.$route.query.cIndex
       return _.isNumber(index) ? index : Number.parseInt(index)
     },
     tabIndex() {
@@ -264,6 +268,23 @@ export default {
       }
       justify-content: space-around;
       align-items: center;
+      .switch-light-block,.switch-tv-block{
+          width: 220px;
+          height: 56px;
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+      .icon-power,.icon-hdmi{
+        font-size: 46px;
+        color: #cccccc;
+      }
+      .icon-power.active{
+       color: #05327b;
+      }
+      .icon-hdmi.active{
+       color: #05327b;
+      }
+      }
     }
   }
 }
