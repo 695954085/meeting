@@ -1,14 +1,18 @@
 <template>
   <div class="roomMap">
-    <div class="roomMap-dot-outer" :style="{top:topValue, left:leftValue}">
+    <div class="roomMap-dot-outer"
+         :style="{top:location.topValue, left:location.leftValue}">
       <div class="roomMap-dot-inner"></div>
     </div>
-    <i class="iconfont icon-location" v-show="isLocation" :style="{top:postion.top,left:postion.left}"></i>
+    <i class="iconfont icon-location"
+       v-show="isLocation"
+       :style="{top:postion.top,left:postion.left}"></i>
   </div>
 </template>
 <script>
 import { getPosition } from '@/api'
 import { vuxInfo } from '@/utils/alert'
+import { mapState } from 'vuex'
 
 export default {
   name: 'RoomMap',
@@ -21,15 +25,19 @@ export default {
       // 定时器
       sid: 0,
       locationData: [
-        {top: '0vw', left: '0vw'},
-        {top: '139vw', left: '43vw'},
-        {top: '139vw', left: '56vw'},
-        {top: '139vw', left: '69vw'},
-        {top: '139vw', left: '82vw'},
-        {top: '48vw', left: '56vw'}]
+        { top: '0vw', left: '0vw' },
+        { top: '139vw', left: '43vw' },
+        { top: '139vw', left: '56vw' },
+        { top: '139vw', left: '69vw' },
+        { top: '139vw', left: '82vw' },
+        { top: '48vw', left: '56vw' }
+      ]
     }
   },
   computed: {
+    ...mapState('workarea', {
+      location: 'position'
+    }),
     postion: function() {
       return this.locationData[this.locationValue]
     },
@@ -47,23 +55,39 @@ export default {
       ble.isEnabled(
         () => {
           // eslint-disable-next-line
-          ble.startScanWithOptions([], { reportDuplicates: true }, device => {
-            // 放进到deviceMap中
-            const { name, id, rssi } = device
-            // 排除非183 蓝牙外设
-            if (!new RegExp(/^183\d{4}$/).test(name)) return
-            let deviceList = this.deviceMap.get(name)
-            if (!deviceList) {
-              deviceList = []
-              this.deviceMap.set(name, deviceList)
+          cordova.plugins.diagnostic.isLocationAvailable(
+            result => {
+              if (result) {
+                this.startScanWithOptions()
+              } else {
+                // eslint-disable-next-line
+                cordova.plugins.diagnostic.switchToLocationSettings();
+                // cordova.plugins.diagnostic.requestLocationAuthorization(
+                //   status => {
+                //     switch (status) {
+                //       // eslint-disable-next-line
+                //       case cordova.plugins.diagnostic.permissionStatus.GRANTED:
+                //         // this.startScanWithOptions()
+
+                //         break
+                //       default: {
+                //         this.locatedService()
+                //       }
+
+                //     }
+                //   },
+                //   error => {
+                //     console.log(error)
+                //     this.locatedService()
+                //   }
+                // )
+              }
+            },
+            error => {
+              console.log(error)
+              this.locatedService()
             }
-            deviceList.push({
-              name,
-              mac: id,
-              rssi
-            })
-            this.deviceMap.set(name, deviceList)
-          })
+          )
         },
         () => {
           vuxInfo(this, '开启蓝牙权限以及定位权限', () => {
@@ -79,6 +103,26 @@ export default {
           })
         }
       )
+    },
+    startScanWithOptions() {
+      // eslint-disable-next-line
+      ble.startScanWithOptions([], { reportDuplicates: true }, device => {
+        // 放进到deviceMap中
+        const { name, id, rssi } = device
+        // 排除非183 蓝牙外设
+        if (!new RegExp(/^183\d{4}$/).test(name)) return
+        let deviceList = this.deviceMap.get(name)
+        if (!deviceList) {
+          deviceList = []
+          this.deviceMap.set(name, deviceList)
+        }
+        deviceList.push({
+          name,
+          mac: id,
+          rssi
+        })
+        this.deviceMap.set(name, deviceList)
+      })
     },
     // 开启定时服务
     timedTask(timeout = 10000) {
@@ -181,22 +225,23 @@ export default {
     }
   },
   created() {
-    this.locatedService()
-    this.timedTask()
-  },
-  destroyed() {
-    // 关闭ble扫描
-    // eslint-disable-next-line
-    ble.stopScan(
-      () => {
-        console.log('ble扫描关闭')
-      },
-      () => {
-        console.log('ble扫描关闭异常')
-      }
-    )
-    clearTimeout(this.sid)
+    // this.locatedService()
+    // this.timedTask()
+    // document.addEventListener('resume', this.locatedService)
   }
+  // destroyed() {
+  //   // 关闭ble扫描
+  //   // eslint-disable-next-line
+  //   ble.stopScan(
+  //     () => {
+  //       console.log('ble扫描关闭')
+  //     },
+  //     () => {
+  //       console.log('ble扫描关闭异常')
+  //     }
+  //   )
+  //   clearTimeout(this.sid)
+  // }
 }
 </script>
 <style lang="less" scoped>
@@ -227,7 +272,7 @@ export default {
       background-color: #366bfd;
     }
   }
-  .icon-location{
+  .icon-location {
     position: absolute;
     color: #fa6017;
     font-size: 36px;
