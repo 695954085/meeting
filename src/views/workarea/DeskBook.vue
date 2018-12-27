@@ -52,6 +52,7 @@ export default {
     this.currentPosition = this.$route.query.currentPosition || this.currentPosition
   },
   deactivated() {
+    // 失活的时候清除红标位置
     this.currentPosition = 0
   }
 }
