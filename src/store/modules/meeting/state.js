@@ -6,7 +6,6 @@ export default {
     username: '郑旭涛'
   },
   filterData: [], // 孩子和meetingData格式一致，存放是否完成分类
-  showData: [],
   bookTitle: '',
   bookLocation: 0, // 预约位置
   bookPersonList: [], // 预约参会人员

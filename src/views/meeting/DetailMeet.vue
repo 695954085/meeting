@@ -49,6 +49,7 @@ import Clock from '@/components/Clock'
 import { mapGetters } from 'vuex'
 import { lightControl } from '@/api/'
 import moment from 'moment'
+import _ from 'lodash'
 
 export default {
   name: 'DetailMeet',
@@ -60,9 +61,7 @@ export default {
     return {
       clockSize: '96px',
       roomMenu: ['会议室1', '会议室2', '会议室3'],
-      lightState: true,
-      timeIndex: this.$route.query.fIndex,
-      dataIndex: this.$route.query.cIndex
+      lightState: true
     }
   },
   methods: {
@@ -89,6 +88,18 @@ export default {
     ...mapGetters('meeting', {
       meetingData: 'showData'
     }),
+    timeIndex() {
+      const index = this.$route.query.fIndex
+      return _.isNumber(index) ? index : Number.parseInt(index)
+    },
+    dataIndex() {
+      const index = this.$route.query.fIndex
+      return _.isNumber(index) ? index : Number.parseInt(index)
+    },
+    tabIndex() {
+      const index = this.$route.query.tabIndex
+      return _.isNumber(index) ? index : Number.parseInt(index)
+    },
     isUseful() {
       // 已完成
       if (this.tabIndex === 1) {
@@ -107,7 +118,7 @@ export default {
       return true
     },
     showData() {
-      return this.meetingData(this.$route.query.tabIndex)
+      return this.meetingData(this.tabIndex)
     },
     detail() {
       let detailData = {}
