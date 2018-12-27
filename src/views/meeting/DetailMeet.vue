@@ -14,7 +14,9 @@
             <h3 class="detail-meet-title">{{detail.subject}}</h3>
             <div class="detail-meet-down-left">
               <div class="detail-meet-time">
-                <i class="icon iconfont icon-clock"></i><span>{{detail.startTime}}-{{detail.endTime}}</span></div>
+                <i class="icon iconfont icon-clock"></i>
+                <span>{{detail.startTime}}-{{detail.endTime}}</span>
+              </div>
               <div class="detail-meet-location">
                 <i class="icon iconfont icon-location"></i>
                 <span>{{roomMenu[detail.room-1]}}</span>
@@ -40,6 +42,14 @@
                @change="handleLight"
                :disabled="isUseful">
       </div>
+      <div class="detail-meet-tv">
+        <div class="detail-meet-tv-title">会议室TV</div>
+        <input class='switch-component'
+               type='checkbox'
+               v-model="tvState"
+               @change="handleTV"
+               :disabled="isUseful">
+      </div>
     </div>
   </div>
 </template>
@@ -47,7 +57,7 @@
 import { Qrcode } from 'vux'
 import Clock from '@/components/Clock'
 import { mapGetters } from 'vuex'
-import { lightControl } from '@/api/'
+import { lightControl, tvControl } from '@/api/'
 import moment from 'moment'
 import _ from 'lodash'
 
@@ -61,7 +71,8 @@ export default {
     return {
       clockSize: '96px',
       roomMenu: ['会议室1', '会议室2', '会议室3'],
-      lightState: true
+      lightState: true,
+      tvState: false
     }
   },
   methods: {
@@ -82,7 +93,18 @@ export default {
       params.append('method', this.lightState ? 'Open' : 'Close')
       let responseValue = await lightControl(params)
       console.log(responseValue)
+    },
+    async handleTV() {
+      let params = new URLSearchParams()
+      params.append(
+        'room',
+        this.showData[this.timeIndex].data[this.dataIndex].room
+      )
+      params.append('method', this.tvState ? 'Open' : 'Close')
+      let responseValue = await tvControl(params)
+      console.log(responseValue)
     }
+
   },
   computed: {
     ...mapGetters('meeting', {
@@ -145,18 +167,19 @@ export default {
     height: calc(100% - 46px);
     .detail-meet-content {
       width: 686px;
-      height: 894px;
-      margin: 60px auto;
+      height: 824px;
+      margin: 40px auto;
       background: #ffffff;
+      border-radius: 10px;
       .detail-meet-up {
-        height: 444px;
+        height: 404px;
         border: 1px dotted #cccccc;
         display: flex;
         justify-content: center;
         align-items: center;
       }
       .detail-meet-down {
-        height: 450px;
+        height: 420px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -165,10 +188,10 @@ export default {
           justify-content: center;
           flex-wrap: wrap;
           width: 558px;
-          height: 387px;
+          height: 307px;
           .detail-meet-title {
             width: 100%;
-            padding: 55px 0 20px 0;
+            padding: 20px 0;
             font-family: PingFangSC-Medium;
             font-size: 38px;
             font-weight: 700;
@@ -190,6 +213,9 @@ export default {
               letter-spacing: 0px;
               color: #333333;
               padding: 10px 0;
+              // white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
               span {
                 margin-left: 10px;
               }
@@ -211,19 +237,25 @@ export default {
                 }
               }
             }
+            & >div.detail-meet-personList{
+              height: 68px;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+            }
           }
         }
       }
     }
 
-    .detail-meet-light {
+    .detail-meet-light,.detail-meet-tv {
       background-color: #ffffff;
       width: 686px;
-      height: 124px;
+      height: 104px;
       margin: 10px auto;
       border-radius: 10px;
       display: flex;
-      .detail-meet-light-title {
+      .detail-meet-light-title,.detail-meet-tv-title {
         height: 37px;
         font-size: 38px;
         line-height: 38px;

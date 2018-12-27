@@ -2,7 +2,8 @@
   <div class="deskList">
     <div class="deskBook-card"
          v-for="item in getDeskBookList"
-         :key="item.id">
+         :key="item.id"
+         @touchstart="showDeleteConfirm(item.id)" @touchend="clearLoop">
       <div class="deskBook-body"
            :class="{occupy: parseInt(item.occupy)===1?true:false}">
         <div class="deskBook-body-left">
@@ -13,9 +14,9 @@
         <i class="iconfont icon-chair"></i>
       </div>
       <div class="deskBook-footer">
-        <div class="deskBook-footernavigation" @click="toRoomMap(item.station)">导航<i class="iconfont icon-navigation"></i></div>
+        <div class="deskBook-footernavigation" @click.stop="toRoomMap(item.station)">导航<i class="iconfont icon-navigation"></i></div>
         <div class="deskBook-footerchageState"
-             @click="handleClick(item.id,item.occupy)">{{deskStateText[parseInt(item.occupy)]}}</div>
+             @click.stop="handleClick(item.id,item.occupy)">{{deskStateText[parseInt(item.occupy)]}}</div>
       </div>
     </div>
     <div class="deskBook-card-add"
@@ -33,13 +34,15 @@
 import { mapState, mapMutations } from 'vuex'
 import { getDeskList, releaseDesk, updateDeskState } from '@/api/'
 import { vuxInfo } from '@/utils/alert.js'
+import { setTimeout, clearTimeout } from 'timers'
 export default {
   name: 'DeskList',
   data() {
     return {
       deskState: ['未使用', '使用中'],
       deskStateText: ['开始使用', '提前释放'],
-      deskNumber: ['1号工位', '2号工位', '3号工位', '4号工位']
+      deskNumber: ['1号工位', '2号工位', '3号工位', '4号工位'],
+      Loop: null
     }
   },
   activated() {
@@ -55,6 +58,45 @@ export default {
   },
   methods: {
     ...mapMutations('workarea', ['setdeskBookRecord']),
+    async releaseBook(id) {
+      let responseValue
+      try {
+        responseValue = await releaseDesk(id)
+      } catch (err) {
+        vuxInfo(this, err)
+        return
+      }
+      const { status, data } = responseValue
+      if (status !== 200) {
+        vuxInfo(this, '服务器异常')
+      } else {
+        if (data === 'success') {
+          vuxInfo(this, '释放成功', () => {
+            this.queryDataList()
+          })
+        } else {
+          vuxInfo(this, '释放失败')
+        }
+      }
+    },
+    showDeleteConfirm(value) {
+      clearTimeout(this.Loop)
+      this.Loop = null
+      this.Loop = setTimeout(() => {
+        let _this = this
+        this.$vux.confirm.show({
+          title: '取消提示',
+          content: '残忍取消该预约？',
+          onConfirm () {
+            _this.releaseBook(value)
+          }
+        })
+      }, 500)
+    },
+    clearLoop() {
+      clearTimeout(this.Loop)
+      this.Loop = null
+    },
     toRoomMap(value) {
       this.$emit('ee', value)
     },
@@ -125,25 +167,7 @@ export default {
         )
       } else {
         // index === 1的情况
-        let responseValue
-        try {
-          responseValue = await releaseDesk(id)
-        } catch (err) {
-          vuxInfo(this, err)
-          return
-        }
-        const { status, data } = responseValue
-        if (status !== 200) {
-          vuxInfo(this, '服务器异常')
-        } else {
-          if (data === 'success') {
-            vuxInfo(this, '释放成功', () => {
-              this.queryDataList()
-            })
-          } else {
-            vuxInfo(this, '释放失败')
-          }
-        }
+        this.releaseBook(id)
       }
     }
   }

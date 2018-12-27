@@ -15,6 +15,7 @@ import {
   Group,
   XButton,
   LoadingPlugin,
+  ConfirmPlugin,
   XHeader
 } from 'vux'
 
@@ -23,6 +24,7 @@ Vue.use(ToastPlugin, {
   position: 'bottom'
 })
 Vue.use(LoadingPlugin)
+Vue.use(ConfirmPlugin)
 Vue.component('x-input', XInput)
 Vue.component('x-textarea', XTextarea)
 Vue.component('group', Group)

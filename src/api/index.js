@@ -54,6 +54,13 @@ export const lightControl = params =>
     params
   )
 
+// 会议室TV控制
+export const tvControl = params =>
+  instance.post(
+    `${config.IP}:${config.PORT}${config.prefix}/meeting-room-tvswitchs`,
+    params
+  )
+
 // 工位预约
 export const bookStation = params =>
   instance.post(

@@ -97,7 +97,7 @@ export default {
     handleAddmeeting() {
       this.$router.push(`/addMeet`)
     },
-    async onButtonClick(type) {
+    async deleteMeet(type) {
       let responseValue
       responseValue = await deleteMeet(type)
       let { status, data } = responseValue
@@ -105,9 +105,19 @@ export default {
         vuxInfo(this, '服务器异常')
       } else {
         if (data === 'success') {
-          this.queryMeetingData()
+          this.debounceFn()
         }
       }
+    },
+    onButtonClick(type) {
+      let _this = this
+      this.$vux.confirm.show({
+        title: '取消提示',
+        content: '残忍取消该预约？',
+        onConfirm () {
+          _this.deleteMeet(type)
+        }
+      })
     },
     toMeetDetail(fIndex, cIndex) {
       this.$router.push({
