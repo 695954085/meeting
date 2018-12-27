@@ -3,7 +3,8 @@
     <x-header
       :left-options="{backText: '首页', preventGoBack:true}"
       @on-click-back="handleReturn"
-      title="slot:overwrite-title">
+      title="slot:overwrite-title"
+    >
       <div class="overwrite-title" slot="overwrite-title">
         <button-tab v-model="tabIndex">
           <button-tab-item>未完成</button-tab-item>
@@ -59,7 +60,8 @@ import {
   ButtonTabItem,
   Swipeout,
   SwipeoutItem,
-  SwipeoutButton
+  SwipeoutButton,
+  debounce
 } from 'vux'
 import { mapMutations, mapState, mapGetters } from 'vuex'
 import Clock from '@/components/Clock'
@@ -82,7 +84,8 @@ export default {
     return {
       clockSize: '96px',
       roomMenu: ['会议室1', '会议室2', '会议室3'],
-      tabIndex: 0
+      tabIndex: 0,
+      debounceFn: this.queryMeetingData()
     }
   },
   filters: {},
@@ -94,10 +97,10 @@ export default {
     handleAddmeeting() {
       this.$router.push(`/addMeet`)
     },
-    async onButtonClick (type) {
+    async onButtonClick(type) {
       let responseValue
       responseValue = await deleteMeet(type)
-      let {status, data} = responseValue
+      let { status, data } = responseValue
       if (status !== 200) {
         vuxInfo(this, '服务器异常')
       } else {
@@ -116,15 +119,17 @@ export default {
         }
       })
     },
-    async queryMeetingData() {
-      let responseValue = await getMeeting(this.user.usercard)
-      console.log(responseValue)
-      let { status, data } = responseValue
-      if (status !== 200) {
-        vuxInfo(this, '请求异常')
-      } else {
-        this.setmeetingData(data)
-      }
+    queryMeetingData() {
+      return debounce(async () => {
+        let responseValue = await getMeeting(this.user.usercard)
+        console.log(responseValue)
+        let { status, data } = responseValue
+        if (status !== 200) {
+          vuxInfo(this, '请求异常')
+        } else {
+          this.setmeetingData(data)
+        }
+      }, 150)
     }
   },
   computed: {
@@ -134,8 +139,11 @@ export default {
       return this.showData(this.tabIndex)
     }
   },
-  async mounted() {
-    this.queryMeetingData()
+  created() {
+    this.debounceFn()
+  },
+  activated() {
+    this.debounceFn()
   }
 }
 </script>

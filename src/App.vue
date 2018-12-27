@@ -1,12 +1,19 @@
 <template>
   <div id="app">
-    <router-view/>
+    <keep-alive :include="keepAlive">
+      <router-view/>
+    </keep-alive>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  data() {
+    return {
+      keepAlive: ['meeting', 'DeskBook']
+    }
+  }
 }
 </script>
 <style lang="less">
