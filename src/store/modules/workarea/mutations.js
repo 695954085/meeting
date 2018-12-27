@@ -25,5 +25,9 @@ export default {
   },
   setdeskBookRecord: (state, data) => {
     state.deskBookRecord = data
+  },
+  setPosition: (state, data) => {
+    state.position.topValue = data.topValue
+    state.position.leftValue = data.leftValue
   }
 }

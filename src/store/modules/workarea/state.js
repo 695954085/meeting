@@ -43,5 +43,9 @@ export default {
       isActive: false,
       isAble: true
     }
-  ] // 当前所有工位状态
+  ], // 当前所有工位状态
+  position: {
+    topValue: '59.5vw',
+    leftValue: '100vw'
+  }
 }
