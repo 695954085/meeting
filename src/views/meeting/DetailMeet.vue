@@ -48,10 +48,10 @@
         <div class="detail-meet-tv-title">会议室TV</div>
               <div class="switch-tv-block">
                 <i class="icon iconfont icon-hdmi"
-                @click="handleDevice('ton',isUseful)"
+                @click="handleDevice('channel',isUseful)"
                 :class="{active:!isUseful}"></i>
                 <i class="icon iconfont icon-power"
-                 @click="handleDevice('channel',isUseful)"
+                 @click="handleDevice('ton',isUseful)"
                  :class="{active:!isUseful}"></i>
               </div>
       </div>
@@ -264,26 +264,28 @@ export default {
         font-size: 38px;
         line-height: 38px;
         letter-spacing: 0px;
+        margin-left: 20px;
         color: #333333;
       }
-      justify-content: space-around;
+      justify-content: space-between;
       align-items: center;
       .switch-light-block,.switch-tv-block{
           width: 220px;
           height: 56px;
           display: flex;
-          justify-content: space-around;
+          justify-content: flex-end;
           align-items: center;
-      .icon-power,.icon-hdmi{
-        font-size: 46px;
-        color: #cccccc;
-      }
-      .icon-power.active{
-       color: #05327b;
-      }
-      .icon-hdmi.active{
-       color: #05327b;
-      }
+        .switch-component{
+          margin: 0 20px;
+        }
+        .icon-power,.icon-hdmi{
+          font-size: 46px;
+          color: #cccccc;
+          margin: 0 20px;
+        }
+        .icon-power.active,.icon-hdmi.active{
+        color: #05327b;
+        }
       }
     }
   }

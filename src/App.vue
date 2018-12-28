@@ -26,7 +26,7 @@ export default {
       ble.isEnabled(
         () => {
           // eslint-disable-next-line
-          cordova.plugins.diagnostic.isLocationAvailable(
+          cordova.plugins.diagnostic.isLocationEnabled(
             result => {
               if (result) {
                 this.startScanWithOptions()
