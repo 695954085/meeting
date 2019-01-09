@@ -75,10 +75,12 @@ export default {
       if (cur) {
         date = new Date(cur)
       } else {
-        var now = new Date()
-        var d = new Date(this.formatDate(now.getFullYear(), now.getMonth(), 1))
+        let now = new Date()
+        let d = new Date(
+          this.formatDate(now.getFullYear(), now.getMonth() + 1, 1)
+        )
         d.setDate(35)
-        date = new Date(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1))
+        date = new Date(this.formatDate(d.getFullYear(), d.getMonth(), 1))
       }
       this.currentDay = date.getDate()
       this.currentYear = date.getFullYear()
@@ -126,7 +128,7 @@ export default {
       this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1))
     },
     pickYear: function(year, month) {
-      alert(year + ',' + month)
+      // alert(year + ',' + month)
     },
 
     // 返回 类似 2016-01-02 格式的字符串
@@ -136,7 +138,7 @@ export default {
       if (m < 10) m = '0' + m
       var d = day
       if (d < 10) d = '0' + d
-      return y + '-' + m + '-' + d
+      return y + '/' + m + '/' + d
     },
 
     handleSelect(dayobject) {
@@ -146,16 +148,12 @@ export default {
       this.days[index] = value
       // 存一下vuex
       if (this.deskBookDate.length === 0) {
-        let aa = []
-        aa.push(dayobject)
-        this.setdeskBookDate(aa)
-      } else if (this.deskBookDate.length === 1) {
-        let aaa = []
-        aaa.push(dayobject)
+        this.setdeskBookDate([dayobject, dayobject])
+      } else if (this.deskBookDate[0] === this.deskBookDate[1]) {
         if (dayobject.day > this.deskBookDate[0].day) {
-          this.setdeskBookDate([...this.deskBookDate, ...aaa])
+          this.setdeskBookDate([this.deskBookDate[0], dayobject])
         } else {
-          this.setdeskBookDate([...aaa, ...this.deskBookDate])
+          this.setdeskBookDate([dayobject, this.deskBookDate[1]])
         }
 
         for (let i = 0; i < this.days.length; i++) {

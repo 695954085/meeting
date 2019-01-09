@@ -20,7 +20,7 @@ export default {
     }
   ],
   deskBookDateCertain: false, // 是否确认提交
-  deskSeatCertain: false, // 是否确认选择位置
+  deskSeatCertain: true, // 是否确认选择位置
   deskBookDate: [], // 预约时间数组
   deskBookSeatData: [
     {

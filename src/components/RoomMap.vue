@@ -61,7 +61,7 @@ export default {
                 this.startScanWithOptions()
               } else {
                 // eslint-disable-next-line
-                cordova.plugins.diagnostic.switchToLocationSettings();
+                cordova.plugins.diagnostic.switchToLocationSettings()
                 // cordova.plugins.diagnostic.requestLocationAuthorization(
                 //   status => {
                 //     switch (status) {
@@ -125,12 +125,12 @@ export default {
       })
     },
     // 开启定时服务
-    timedTask(timeout = 10000) {
+    timedTask(timeout = 3000) {
       // 每隔10秒钟请求一次位置
       this.sid = setTimeout(() => {
         // 判断10秒内，是否满足3个蓝牙设备
         if (!this.isSatisfiedThreeDevice()) {
-          this.timedTask(5000)
+          this.timedTask(2000)
           return
         }
         // 计算10秒钟内，rssi最强的前三蓝牙设备
